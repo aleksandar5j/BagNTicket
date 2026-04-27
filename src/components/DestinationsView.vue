@@ -27,8 +27,8 @@ async function getDestinations() {
 const destinationsSection = ref<HTMLElement | null>(null)
 
 onMounted(async () => {
-  await getDestinations() // sačekaj API
-  await nextTick() // sačekaj render
+  await getDestinations()
+  await nextTick()
 
   destinationsSection.value?.scrollIntoView({
     behavior: 'smooth',
@@ -39,7 +39,6 @@ onMounted(async () => {
 
 <template>
   <div class="page">
-    <!-- HERO -->
     <section class="hero">
       <div class="hero-content">
         <h1>Explore Destinations</h1>
@@ -54,7 +53,6 @@ onMounted(async () => {
       </div>
     </section>
 
-    <!-- DESTINATIONS -->
     <section ref="destinationsSection" class="destinations">
       <h2>All Destinations</h2>
 
@@ -66,6 +64,9 @@ onMounted(async () => {
           <div class="label">
             {{ dest.des_name }}
           </div>
+          <div class="overlay">
+            <span>Saznaj više</span>
+          </div>
         </div>
       </div>
     </section>
@@ -74,7 +75,7 @@ onMounted(async () => {
 
 <style scoped>
 .page {
-  padding-top: 50px;
+  padding-top: 80px;
 }
 
 .destinations {
@@ -133,7 +134,6 @@ onMounted(async () => {
   cursor: pointer;
 }
 
-/* GRID ostaje tvoj ali centriran kao gore */
 .grid {
   display: flex;
   flex-wrap: wrap;
@@ -143,7 +143,6 @@ onMounted(async () => {
   margin: 0 auto;
 }
 
-/* TVOJE KARTICE (ne diram dizajn) */
 .card {
   width: 200px;
   height: 300px;
@@ -157,6 +156,39 @@ onMounted(async () => {
     transform 0.3s ease,
     transform 0.3s ease,
     box-shadow 0.3s ease;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  opacity: 0;
+  transition: 0.3s ease;
+
+  backdrop-filter: blur(2px);
+}
+
+.card:hover .overlay {
+  opacity: 1;
+}
+
+.overlay span {
+  transform: translateY(20px);
+  transition: 0.3s ease;
+}
+
+.card:hover .overlay span {
+  transform: translateY(0);
 }
 
 .card img {

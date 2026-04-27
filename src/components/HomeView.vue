@@ -32,7 +32,7 @@
 
 <style scoped>
 .home {
-  padding-top: 50px;
+  padding-top: 80px;
 }
 
 /* HERO */

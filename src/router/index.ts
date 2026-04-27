@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '@/components/HomeView.vue'
 import DestinationsView from '@/components/DestinationsView.vue'
+import CategoriesView from '@/components/CategoriesView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +18,11 @@ const router = createRouter({
       name: 'destinations',
       component: DestinationsView,
     },
+    {
+      path: '/categories',
+      name: 'categories',
+      component: CategoriesView,
+    },
   ],
 
   scrollBehavior(to, from, savedPosition) {
@@ -24,7 +30,6 @@ const router = createRouter({
       return savedPosition
     }
 
-    // uvek na vrh za nove rute
     return {
       top: 0,
       behavior: 'smooth',

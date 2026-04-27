@@ -1,4 +1,38 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import api from './api'
+import { ref, onMounted } from 'vue'
+
+type Category = {
+  cat_id: number
+  cat_name: string
+  cat_description: string
+}
+
+const categories = ref<Category[]>([])
+
+async function getCategories() {
+  try {
+    const res = await api.getCategories()
+    categories.value = res.data.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+onMounted(() => {
+  getCategories()
+})
+
+const isOpen = ref(false)
+
+function openMenu() {
+  isOpen.value = true
+}
+
+function closeMenu() {
+  isOpen.value = false
+}
+</script>
 
 <template>
   <div class="app">
@@ -32,7 +66,20 @@
       <div class="container nav-inner">
         <nav class="nav">
           <router-link to="/destinations">Destinations</router-link>
-          <router-link to="/categories">Categories</router-link>
+          <div class="dropdown">
+            <span class="dropbtn" @click="isOpen = !isOpen"> Categories ▾ </span>
+
+            <div class="dropdown-content" :class="{ open: isOpen }">
+              <router-link
+                v-for="cat in categories"
+                :key="cat.cat_id"
+                :to="`/categories/${cat.cat_id}`"
+                @click="isOpen = false"
+              >
+                {{ cat.cat_name }}
+              </router-link>
+            </div>
+          </div>
           <router-link to="/offers">Offers</router-link>
           <router-link to="/accommodations">Hotels</router-link>
           <router-link to="/transport">Transport</router-link>
@@ -106,11 +153,24 @@
   pointer-events: none;
 }
 
-.header,
-.main-nav,
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.main-nav {
+  position: relative;
+}
+
+.dropdown-content {
+  z-index: 100000;
+}
+
 .content {
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
 .container {
@@ -286,5 +346,71 @@
 .auth a:last-child:hover {
   background: #0f4de0;
   border-color: #0f4de0;
+}
+
+.dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dropbtn {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+  opacity: 0.7;
+  padding: 5px 0;
+  position: relative;
+  transition: 0.2s;
+}
+
+.dropdown:hover .dropbtn {
+  opacity: 1;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+
+  min-width: 210px;
+
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+
+  border-radius: 14px;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+
+  display: flex;
+  flex-direction: column;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+
+  transition: all 0.2s ease;
+
+  z-index: 2000;
+
+  pointer-events: auto;
+}
+
+.dropdown-content.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-content a {
+  padding: 12px 15px;
+  text-decoration: none;
+  color: #111;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.dropdown-content a:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 </style>
