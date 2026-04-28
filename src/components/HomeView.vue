@@ -3,6 +3,17 @@ import { imageUrl } from '@/api/config'
 import api from '@/api'
 import { ref, onMounted } from 'vue'
 
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+function goToDetails(id: number) {
+  router.push({
+    name: 'destinations-details',
+    params: { id },
+  })
+}
+
 type Arrangement = {
   arr_id: number
   des_id: number
@@ -69,31 +80,25 @@ onMounted(() => {
       </div>
     </section>
 
-    <section class="hero">
-      <div class="hero-content">
-        <h1>Discover Your Next Adventure</h1>
-        <p>Find the best destinations, hotels and travel deals worldwide</p>
-
-        <div class="search-box">
-          <input type="text" placeholder="Where do you want to go?" />
-          <button>Search</button>
-        </div>
-      </div>
-    </section>
-
     <section class="featured">
       <h2>Popular Destinations</h2>
 
-      <div class="grid">
-        <div class="card" v-for="dest in popularDestinations" :key="dest.des_id">
+      <div class="featured-grid">
+        <div
+          class="card-modern"
+          :class="{ big: index === 0 }"
+          v-for="(dest, index) in popularDestinations"
+          :key="dest.des_id"
+          @click="goToDetails(dest.des_id)"
+        >
           <img v-if="dest.image" :src="imageUrl + dest.image" />
           <div v-else class="no-img">No image</div>
 
-          <div class="label">
+          <div class="card-title">
             {{ dest.des_name }}
           </div>
 
-          <div class="overlay">
+          <div class="card-overlay" @click.stop="goToDetails(dest.des_id)">
             <span>Explore</span>
           </div>
         </div>
@@ -102,19 +107,26 @@ onMounted(() => {
 
     <!-- LAST MINUTE DEALS -->
     <section class="deals">
-      <h2>Last Minute Deals</h2>
+      <h2>Last Minute Offers</h2>
 
-      <div class="grid">
-        <div class="card" v-for="arr in lastMinuteDeals" :key="arr.arr_id">
+      <div class="deals-grid">
+        <div
+          class="card-modern"
+          :class="{ big: index === 0 }"
+          v-for="(arr, index) in lastMinuteDeals"
+          :key="arr.arr_id"
+        >
           <img v-if="arr.image" :src="imageUrl + arr.image" />
           <div v-else class="no-img">No image</div>
 
-          <div class="label">
+          <div class="card-title">
             {{ arr.arr_title }}
           </div>
 
-          <div class="overlay">
-            <span>Explore</span>
+          <div class="card-badge">{{ arr.arr_price }}€</div>
+
+          <div class="card-overlay">
+            <span>Book now</span>
           </div>
         </div>
       </div>
@@ -123,210 +135,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.hero {
-  height: 60vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
+.home {
+  padding-top: 280px;
 }
 
-.hero-content {
-  max-width: 700px;
-  margin-top: -100px;
-}
-
-.hero-content h1 {
-  font-size: 42px;
-  margin-bottom: 10px;
-  opacity: 0.9;
-}
-
-.hero-content p {
-  color: #555;
-  margin-bottom: 25px;
-}
-
-/* SEARCH */
-.search-box {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.search-box input {
-  width: 300px;
-  padding: 10px 15px;
-  border: 1px solid #ddd;
-  border-radius: 25px;
-  outline: none;
-}
-
-.search-box button {
-  padding: 10px 20px;
-  border-radius: 25px;
-  border: none;
-  background: #1e66ff;
-  color: #fff;
-  cursor: pointer;
-}
-
-.featured {
-  text-align: center;
-  padding: 60px 20px;
-}
-
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px;
-  justify-content: center;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.card {
-  width: 200px;
-  height: 300px;
-  position: relative;
-  border-radius: 15px;
-  overflow: hidden;
-  cursor: pointer;
-
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-}
-
-.card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.card:hover img {
-  transform: scale(1.1);
-}
-
-.card:hover {
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-}
-
-/* LABEL */
-.label {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-/* OVERLAY */
-.overlay {
-  position: absolute;
-  inset: 0;
-
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 18px;
-  font-weight: 600;
-
-  opacity: 0;
-  transition: 0.3s ease;
-}
-
-.card:hover .overlay {
-  opacity: 1;
-}
-
-.no-img {
-  width: 100%;
-  height: 100%;
-  background: #eee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ABOUT */
-.about {
-  padding: 80px 20px 40px;
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.about h1 {
-  font-size: 38px;
-  margin-bottom: 15px;
-  color: #111;
-}
-
-.about p {
-  font-size: 16px;
-  color: #555;
-  line-height: 1.6;
-}
-
-/* HERO */
-.hero {
-  height: 55vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
-}
-
-.hero-content {
-  max-width: 700px;
-}
-
-.hero-content h1 {
-  font-size: 42px;
-  margin-bottom: 10px;
-}
-
-.hero-content p {
-  color: #555;
-  margin-bottom: 25px;
-}
-
-/* SEARCH */
-.search-box {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.search-box input {
-  width: 300px;
-  padding: 10px 15px;
-  border: 1px solid #ddd;
-  border-radius: 25px;
-}
-
-.search-box button {
-  padding: 10px 20px;
-  border-radius: 25px;
-  border: none;
-  background: #1e66ff;
-  color: #fff;
-  cursor: pointer;
-}
-
-/* SECTIONS */
 .featured,
 .deals {
   text-align: center;
@@ -339,6 +151,162 @@ onMounted(() => {
   font-size: 28px;
 }
 
+.deals-grid,
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.deals-grid {
+  grid-auto-rows: 250px;
+}
+
+.featured-grid {
+  grid-auto-rows: 220px;
+}
+
+/* BIG CARD (ZA OBA) */
+.big {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+/* ========================= */
+/* UNIVERSAL CARD */
+/* ========================= */
+
+.card-modern {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.card-modern img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.4s ease;
+}
+
+.card-modern:hover img {
+  transform: scale(1.1);
+}
+
+.card-modern:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* GRADIENT */
+.card-modern::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2), transparent);
+}
+
+/* TITLE (DOLE) */
+.card-title {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+
+  padding: 6px 12px;
+  border-radius: 10px;
+
+  z-index: 2;
+
+  transition: 0.3s ease;
+}
+
+/* PRICE BADGE */
+.card-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+
+  background: #88342f;
+  color: #fff;
+
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+
+  z-index: 2;
+}
+
+.card-overlay {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  transition: 0.3s ease;
+
+  backdrop-filter: blur(6px);
+
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.card-overlay span {
+  background: rgba(250, 250, 250, 0.15);
+  backdrop-filter: blur(5px);
+
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+
+  padding: 10px 20px;
+  border-radius: 30px;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  transition: 0.3s ease;
+}
+
+.card-modern:hover .card-overlay span {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.card-modern:hover .card-overlay {
+  opacity: 1;
+}
+
+.card-modern:hover .card-title {
+  background: rgba(0, 0, 0, 0.7);
+  transform: translateY(-2px);
+}
+
+/* NO IMAGE */
+.no-img {
+  width: 100%;
+  height: 100%;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .about {
   text-align: center;
   max-width: 900px;
@@ -346,7 +314,7 @@ onMounted(() => {
 }
 
 .about h1 {
-  font-size: 54px;
+  font-size: 56px;
   font-weight: 800;
   line-height: 1.1;
   color: #111;
@@ -359,7 +327,6 @@ onMounted(() => {
   font-weight: bold;
   color: #705519;
   margin-bottom: 25px;
-  letter-spacing: 1px;
 }
 
 .about p {
@@ -367,12 +334,14 @@ onMounted(() => {
   color: #555;
   line-height: 1.8;
   margin-bottom: 15px;
+  margin-top: 150px;
 }
 
 .about p.sub {
   font-size: 16px;
   color: #777;
-  max-width: 750px;
+  max-width: 1100px;
   margin: 0 auto;
+  margin-bottom: 80px;
 }
 </style>

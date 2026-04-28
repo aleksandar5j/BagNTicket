@@ -11,4 +11,9 @@ export default {
   //--- HOME PAGE ---//
   popularDest: () => axios.get('front/destinations/popular'),
   lastMinuteDeals: () => axios.get('front/destinations/lastminute'),
+
+  getDestinationDetails: (des_id: number) =>
+    axios.get('front/destinations/details', {
+      params: { des_id },
+    }),
 }
