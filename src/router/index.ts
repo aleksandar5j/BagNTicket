@@ -19,7 +19,7 @@ const router = createRouter({
       component: DestinationsView,
     },
     {
-      path: '/categories',
+      path: '/categories/:id',
       name: 'categories',
       component: CategoriesView,
     },

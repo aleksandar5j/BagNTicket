@@ -24,14 +24,6 @@ onMounted(() => {
 })
 
 const isOpen = ref(false)
-
-function openMenu() {
-  isOpen.value = true
-}
-
-function closeMenu() {
-  isOpen.value = false
-}
 </script>
 
 <template>
@@ -324,17 +316,17 @@ function closeMenu() {
 .auth a:first-child {
   background: #fff;
   color: #111;
-  border: 1px solid #fff;
+  border: 2px solid #fff;
 }
 
 .auth a:last-child {
   background: #1e66ff;
   color: #fff;
-  border: 1px solid #1e66ff;
+  border: 2px solid #1e66ff;
 }
 
 .auth a:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .auth a:first-child:hover {

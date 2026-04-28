@@ -65,7 +65,7 @@ onMounted(async () => {
             {{ dest.des_name }}
           </div>
           <div class="overlay">
-            <span>Saznaj više</span>
+            <span>View more</span>
           </div>
         </div>
       </div>

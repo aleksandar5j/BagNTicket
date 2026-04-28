@@ -3,4 +3,12 @@ import axios from './config'
 export default {
   getDestinations: () => axios.get('front/destinations'),
   getCategories: () => axios.get('front/categories'),
+  filterArrByCat: (cat_id: number) =>
+    axios.get('front/categories/filterArrangements', {
+      params: { cat_id },
+    }),
+
+  //--- HOME PAGE ---//
+  popularDest: () => axios.get('front/destinations/popular'),
+  lastMinuteDeals: () => axios.get('front/destinations/lastminute'),
 }
