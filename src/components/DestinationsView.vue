@@ -41,7 +41,7 @@ onMounted(async () => {
   <div class="page">
     <section class="hero">
       <div class="hero-content">
-        <h1>Explore Destinations</h1>
+        <h1>Explore <strong style="color: #705519">Destinations</strong></h1>
         <p>
           Discover the most beautiful places around the world. Choose your next adventure and create
           unforgettable memories.
@@ -97,7 +97,7 @@ onMounted(async () => {
 }
 
 .hero-content h1 {
-  font-size: 42px;
+  font-size: 46px;
   margin-bottom: 10px;
   opacity: 0.8;
 }
@@ -137,15 +137,15 @@ onMounted(async () => {
 .grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 35px;
   justify-content: center;
-  max-width: 1100px;
+  max-width: 1300px;
   margin: 0 auto;
 }
 
 .card {
-  width: 200px;
-  height: 300px;
+  width: 230px;
+  height: 380px;
   position: relative;
   border-radius: 15px;
   overflow: hidden;

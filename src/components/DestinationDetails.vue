@@ -1,7 +1,6 @@
 <template>
   <div class="details-page">
     <div class="container">
-      <!-- TOP INTRO -->
       <section class="intro" v-if="destination">
         <h1 class="title">
           Discover <strong style="color: #705519">{{ destination.des_name }}</strong>
@@ -14,39 +13,36 @@
         </p>
       </section>
 
-      <!-- HERO -->
       <section class="hero" v-if="destination">
         <img v-if="destination.image" :src="imageUrl + destination.image" class="hero-img" />
       </section>
 
-      <!-- ARRANGEMENTS -->
+      <section class="about" v-if="destination">
+        <p style="text-align: center; padding-bottom: 30px">{{ destination.des_description }}</p>
+      </section>
+
       <section class="section">
         <h2>Available Arrangements</h2>
 
         <div class="arr-grid" v-if="arrangements.length">
           <div class="arr-card" v-for="arr in arrangements" :key="arr.arr_id">
-            <!-- IMAGE -->
             <div class="arr-image">
               <img :src="imageUrl + arr.image" />
 
-              <!-- OVERLAY -->
+              <div class="arr-hover">
+                <span>View More</span>
+              </div>
+
               <div class="arr-overlay">
                 <h3>{{ arr.arr_title }}</h3>
                 <p>{{ arr.cat_name }}</p>
-
                 <div class="price">{{ arr.arr_price }} €</div>
               </div>
-            </div>
-
-            <!-- TEXT BELOW (OPTIONAL) -->
-            <div class="arr-body">
-              <p>{{ arr.arr_description }}</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ACCOMMODATIONS -->
       <section class="section">
         <h2>Hotels & Accommodations</h2>
 
@@ -80,6 +76,7 @@ type Destination = {
   des_id: number
   des_name: string
   des_country: string
+  des_description: string
   image: string
 }
 
@@ -166,8 +163,32 @@ onMounted(async () => {
 .arr-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, 200px);
-  gap: 15px;
+  gap: 40px;
   justify-content: center;
+}
+
+.arr-hover {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.arr-hover span {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.arr-card:hover .arr-hover {
+  opacity: 1;
 }
 
 .arr-card {
@@ -177,14 +198,14 @@ onMounted(async () => {
   background: #fff;
   border: 1px solid #e5e5e5;
   transition: 0.2s;
+  cursor: pointer;
 }
 
 .arr-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-3px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0, 0.15);
 }
 
-/* IMAGE PART */
 .arr-image {
   position: relative;
   width: 100%;
@@ -198,13 +219,14 @@ onMounted(async () => {
   filter: brightness(0.75);
 }
 
-/* OVERLAY */
 .arr-overlay {
   position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  padding: 10px;
   color: white;
+  background: rgba(0, 0, 0, 0.8);
 }
 
 .arr-overlay h3 {
@@ -223,7 +245,6 @@ onMounted(async () => {
   color: #ffd369;
 }
 
-/* BODY */
 .arr-body {
   padding: 10px;
   font-size: 12px;
@@ -315,5 +336,10 @@ onMounted(async () => {
 
 .room-card strong {
   color: #2c7be5;
+}
+
+section h2 {
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>
