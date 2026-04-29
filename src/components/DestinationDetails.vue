@@ -45,16 +45,25 @@
 
       <section class="section">
         <h2>Hotels & Accommodations</h2>
-
         <div class="hotel-grid" v-if="accommodations.length">
           <div class="hotel-card" v-for="acc in accommodations" :key="acc.acc_id">
-            <h3>{{ acc.acc_name }}</h3>
-            <p>{{ acc.acc_description }}</p>
+            <img :src="imageUrl + acc.image" />
 
-            <div class="rooms-grid">
-              <div class="room-card" v-for="room in acc.rooms" :key="room.rom_id">
-                <div>{{ room.rom_type }}</div>
-                <strong>{{ room.rom_price_per_night }} €</strong>
+            <!-- hover -->
+            <div class="hotel-hover">
+              <span>Book now</span>
+            </div>
+
+            <!-- bottom info -->
+            <div class="hotel-overlay">
+              <h3>{{ acc.acc_name }}</h3>
+
+              <div class="stars">
+                <span v-for="n in acc.acc_stars" :key="n">★</span>
+              </div>
+
+              <div class="price" v-for="room in acc.rooms" :key="room.rom_id">
+                from {{ room.rom_price_per_night }} €
               </div>
             </div>
           </div>
@@ -101,6 +110,7 @@ type Room = {
   rom_type: string
   rom_price_per_night: number
   rom_capacity: number
+  image: string
 }
 
 type Accommodation = {
@@ -109,6 +119,7 @@ type Accommodation = {
   acc_type: string
   acc_stars: number
   acc_description: string
+  image: string
   rooms: Room[]
 }
 
@@ -305,39 +316,84 @@ onMounted(async () => {
   padding: 50px;
 }
 
-.rooms-grid {
-  margin-top: 15px;
+.hotel-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 140px);
-  gap: 10px;
-  justify-content: start;
+  grid-template-columns: repeat(auto-fit, 200px);
+  gap: 40px;
+  justify-content: center;
 }
 
-.room-card {
-  width: 140px;
-  height: 120px;
+.hotel-card {
+  position: relative;
+  width: 220px;
+  height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.hotel-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.3s;
+}
+
+.hotel-overlay {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
   padding: 10px;
-  border-radius: 10px;
-  background: #f6f6f6;
+  color: white;
+  background: rgba(0, 0, 0, 0.8);
+}
 
+.hotel-overlay h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.stars {
+  color: #ffd369;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.price {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+/* HOVER DARK */
+.hotel-hover {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  transition: 0.3s;
 }
 
-.room-card {
-  transition: 0.2s;
+.hotel-hover span {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
-.room-card:hover {
-  transform: translateY(-3px);
-  background: #eee;
+/* hover efekti */
+.hotel-card:hover .hotel-hover {
+  opacity: 1;
 }
 
-.room-card strong {
-  color: #2c7be5;
+.hotel-card:hover img {
+  transform: scale(1.05);
 }
-
 section h2 {
   text-align: center;
   margin-bottom: 20px;
