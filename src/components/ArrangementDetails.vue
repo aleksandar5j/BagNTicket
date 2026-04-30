@@ -33,7 +33,35 @@
         </div>
       </div>
 
-      <!-- ACCOMMODATIONS -->
+      <div class="gallery">
+        <h1>Gallery</h1>
+
+        <div class="images">
+          <div v-for="acc in accommodations" :key="acc.acc_id" class="acc-block">
+            <h3>{{ acc.acc_name }}</h3>
+
+            <div class="acc-images" v-if="acc.images.length">
+              <!-- VELIKA SLIKA -->
+              <div class="main-img">
+                <img :src="imageUrl + acc.images[0]" @click="openGallery(acc, 0)" />
+              </div>
+
+              <!-- DESNI GRID -->
+              <div class="thumb-grid">
+                <div class="thumb" v-for="(img, i) in acc.images.slice(1, 6)" :key="i">
+                  <img :src="imageUrl + img" @click="openGallery(acc, i + 1)" />
+                </div>
+
+                <!-- +MORE OVERLAY -->
+                <div v-if="acc.images.length > 6" class="more" @click="openGallery(acc, 0)">
+                  +{{ acc.images.length - 6 }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="accommodations">
         <h2>Available Hotels</h2>
 
@@ -61,6 +89,16 @@
       </div>
     </div>
   </div>
+
+  <div v-if="showGallery" class="lightbox" @click.stop>
+    <span class="close" @click="showGallery = false">✕</span>
+
+    <button @click="prev">‹</button>
+
+    <img :src="imageUrl + activeImages[activeIndex]" />
+
+    <button @click="next">›</button>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -83,6 +121,7 @@ type Accommodation = {
   acc_name: string
   acc_stars: number
   image: string
+  images: string[]
   rooms: Room[]
 }
 
@@ -120,6 +159,25 @@ onMounted(async () => {
     console.error('API ERROR:', err)
   }
 })
+
+const activeImages = ref<string[]>([])
+const activeIndex = ref(0)
+const showGallery = ref(false)
+
+function openGallery(acc, index) {
+  activeImages.value = acc.images
+  activeIndex.value = index
+  showGallery.value = true
+}
+
+function next() {
+  activeIndex.value = (activeIndex.value + 1) % activeImages.value.length
+}
+
+function prev() {
+  activeIndex.value =
+    (activeIndex.value - 1 + activeImages.value.length) % activeImages.value.length
+}
 </script>
 
 <style scoped>
@@ -134,7 +192,6 @@ onMounted(async () => {
   max-width: 1300px;
 }
 
-/* TOP TEXT */
 .top-text {
   text-align: center;
   margin-bottom: 210px;
@@ -150,7 +207,6 @@ onMounted(async () => {
   margin-top: 5px;
 }
 
-/* HERO */
 .hero {
   position: relative;
   height: 500px;
@@ -164,7 +220,6 @@ onMounted(async () => {
   border-radius: 20px;
 }
 
-/* OVERLAY */
 .hero-overlay {
   position: absolute;
   bottom: 20px;
@@ -178,7 +233,6 @@ onMounted(async () => {
   color: white;
 }
 
-/* CONTENT */
 .content {
   display: flex;
   gap: 40px;
@@ -214,7 +268,6 @@ onMounted(async () => {
   background: #8a6b1f;
 }
 
-/* ACCOMMODATIONS */
 .accommodations h2 {
   margin-bottom: 20px;
 }
@@ -269,5 +322,96 @@ onMounted(async () => {
 .room {
   padding: 4px 0;
   background: transparent;
+}
+
+.acc-images {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 10px;
+  height: 550px;
+}
+
+.main-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.thumb-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px;
+  position: relative;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.more {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 48%;
+  height: 32%;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  z-index: 9999;
+}
+
+.lightbox img {
+  max-width: 70%;
+  max-height: 80%;
+  border-radius: 10px;
+}
+
+.lightbox button {
+  background: transparent;
+  border: none;
+  font-size: 40px;
+  color: white;
+  cursor: pointer;
+}
+
+.gallery {
+  margin-bottom: 100px;
+}
+
+.accommodations {
+  position: relative;
+  z-index: 2;
+  background: white;
+  padding-top: 40px;
+}
+.close {
+  position: absolute;
+  top: 100px;
+  right: 100px;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
 }
 </style>
