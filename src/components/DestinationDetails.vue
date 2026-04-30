@@ -25,7 +25,12 @@
         <h2>Available Arrangements</h2>
 
         <div class="arr-grid" v-if="arrangements.length">
-          <div class="arr-card" v-for="arr in arrangements" :key="arr.arr_id">
+          <div
+            class="arr-card"
+            v-for="arr in arrangements"
+            :key="arr.arr_id"
+            @click="goToDetails(arr.arr_id)"
+          >
             <div class="arr-image">
               <img :src="imageUrl + arr.image" />
 
@@ -78,6 +83,17 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/api'
 import { imageUrl } from '@/api/config'
+
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+function goToDetails(id: number) {
+  router.push({
+    name: 'arrangement-details',
+    params: { id },
+  })
+}
 
 const route = useRoute()
 
@@ -132,10 +148,6 @@ const id = Number(route.params.id)
 onMounted(async () => {
   try {
     const res = await api.getDestinationDetails(id)
-
-    console.log('FULL RES:', res)
-    console.log('RES.DATA:', res.data)
-    console.log('RES.DATA.DATA:', res.data.data)
 
     destination.value = res.data.data.destination
     arrangements.value = res.data.data.arrangements
@@ -285,6 +297,7 @@ onMounted(async () => {
 
 .section {
   margin-top: 30px;
+  margin-bottom: 100px;
 }
 
 .card {
@@ -365,7 +378,6 @@ onMounted(async () => {
   font-weight: bold;
 }
 
-/* HOVER DARK */
 .hotel-hover {
   position: absolute;
   inset: 0;
@@ -386,7 +398,6 @@ onMounted(async () => {
   letter-spacing: 1px;
 }
 
-/* hover efekti */
 .hotel-card:hover .hotel-hover {
   opacity: 1;
 }
