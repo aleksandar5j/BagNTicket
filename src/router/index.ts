@@ -5,6 +5,7 @@ import DestinationsView from '@/components/DestinationsView.vue'
 import CategoriesView from '@/components/CategoriesView.vue'
 import DestinationDetails from '@/components/DestinationDetails.vue'
 import ArrangementDetails from '@/components/ArrangementDetails.vue'
+import AccomodationDetails from '@/components/AccomodationDetails.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,11 @@ const router = createRouter({
       path: '/arrangement-details/:id',
       name: 'arrangement-details',
       component: ArrangementDetails,
+    },
+    {
+      path: '/accomodation-details/:id',
+      name: 'accomodation-details',
+      component: AccomodationDetails,
     },
     {
       path: '/categories/:id',

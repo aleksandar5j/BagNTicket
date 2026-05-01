@@ -22,5 +22,10 @@ export default {
       params: { arr_id },
     }),
 
+  getAccommodationDetails: (acc_id: number) =>
+    axios.get('front/accommodations/details', {
+      params: { acc_id },
+    }),
+
   loadGallery: (acc_id: number) => axios.get(`/front/images/gallery/${acc_id}`),
 }

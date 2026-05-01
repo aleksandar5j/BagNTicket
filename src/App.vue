@@ -331,7 +331,7 @@ const isOpen = ref(false)
 
 .auth a:first-child:hover {
   background: transparent;
-  color: #fff;
+  color: #000000;
   border-color: #fff;
 }
 

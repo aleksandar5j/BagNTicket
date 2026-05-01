@@ -7,7 +7,6 @@
         <p class="location">{{ arrangement.des_name }}, {{ arrangement.des_country }}</p>
       </div>
 
-      <!-- HERO IMAGE -->
       <div class="hero">
         <img :src="imageUrl + arrangement.image" class="hero-img" />
 
@@ -17,7 +16,6 @@
         </div>
       </div>
 
-      <!-- DESCRIPTION + BOOK -->
       <div class="content">
         <div class="description">
           <h2>About this trip</h2>
@@ -25,20 +23,34 @@
         </div>
 
         <div class="booking-card">
-          <h3>{{ arrangement.arr_price }}€</h3>
+          <h2>{{ arrangement.arr_title }}</h2>
+          <h3 style="color: #705519">{{ arrangement.arr_price }}€</h3>
           <p>{{ arrangement.arr_duration_days }} days</p>
           <p>{{ arrangement.arr_capacity }} people</p>
+          <p>
+            {{ arrangement.arr_available_from }}
+            <strong style="color: black">to</strong>
+            {{ arrangement.arr_available_to }}
+          </p>
+
+          <button class="hotel-btn" @click="scroolTo()">Choose hotel</button>
+          <div class="warning">
+            <img src="/src/videos-images/for-all/warning.png" />
+            <p>If u dont choose hotel, we will choose random!</p>
+          </div>
 
           <button class="book-btn">Book now</button>
         </div>
       </div>
 
-      <div class="gallery">
-        <h1>Gallery</h1>
+      <div class="divider-with-text">
+        <span>Gallery</span>
+      </div>
 
+      <div class="gallery">
         <div class="images">
           <div v-for="acc in accommodations" :key="acc.acc_id" class="acc-block">
-            <h3>{{ acc.acc_name }}</h3>
+            <h3 style="text-align: center; opacity: 0.8">{{ acc.acc_name }}</h3>
 
             <div class="acc-images" v-if="acc.images.length">
               <!-- VELIKA SLIKA -->
@@ -62,19 +74,33 @@
         </div>
       </div>
 
-      <div class="accommodations">
-        <h2>Available Hotels</h2>
+      <div class="divider-with-text">
+        <span>Hotels</span>
+      </div>
 
+      <div class="accommodations" ref="accSection">
         <div class="acc-grid">
-          <div v-for="acc in accommodations" :key="acc.acc_id" class="acc-card">
+          <div
+            v-for="acc in accommodations"
+            :key="acc.acc_id"
+            class="acc-card"
+            @click="goToDetails(acc.acc_id)"
+          >
             <img :src="imageUrl + acc.image" class="acc-img" />
 
             <div class="acc-info">
               <h3>{{ acc.acc_name }}</h3>
               <div class="stars">
-                <span v-for="n in 5" :key="n">
-                  {{ n <= acc.acc_stars ? '⭐' : '☆' }}
-                </span>
+                <img
+                  v-for="n in 5"
+                  :key="n"
+                  :src="
+                    n <= acc.acc_stars
+                      ? '/src/videos-images/for-all/star.png'
+                      : '/src/videos-images/for-all/emptystar.png'
+                  "
+                  class="star-icon"
+                />
               </div>
 
               <div class="rooms">
@@ -103,11 +129,22 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import api from '@/api'
 import { imageUrl } from '@/api/config'
 
+const accSection = ref(null)
+
 const route = useRoute()
+
+const router = useRouter()
+
+function goToDetails(id: number) {
+  router.push({
+    name: 'accomodation-details',
+    params: { id },
+  })
+}
 
 type Room = {
   rom_id: number
@@ -142,6 +179,12 @@ type Arrangement = {
   arr_available_to: string
   arr_createdat: string
   image: string
+}
+
+function scroolTo() {
+  accSection.value?.scrollIntoView({
+    behavior: 'smooth',
+  })
 }
 
 const arrangement = ref<Arrangement | null>(null)
@@ -252,7 +295,6 @@ function prev() {
 }
 
 .book-btn {
-  margin-top: 15px;
   width: 100%;
   padding: 12px;
   border: none;
@@ -266,6 +308,23 @@ function prev() {
 
 .book-btn:hover {
   background: #8a6b1f;
+}
+
+.hotel-btn {
+  margin-top: 15px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #193c70;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.hotel-btn:hover {
+  background: #1f4a8a;
 }
 
 .accommodations h2 {
@@ -406,6 +465,7 @@ function prev() {
   background: white;
   padding-top: 40px;
 }
+
 .close {
   position: absolute;
   top: 100px;
@@ -413,5 +473,43 @@ function prev() {
   font-size: 30px;
   color: white;
   cursor: pointer;
+}
+
+.divider-with-text {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 60px 0;
+}
+
+.divider-with-text::before,
+.divider-with-text::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #ddd;
+}
+
+.divider-with-text span {
+  padding: 0 15px;
+  color: #888;
+  font-size: 30px;
+}
+
+.warning {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0px;
+}
+
+.warning img {
+  height: 30px;
+}
+
+.star-icon {
+  height: 20px;
+  margin-right: 5px;
 }
 </style>
