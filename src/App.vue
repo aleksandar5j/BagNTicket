@@ -77,6 +77,8 @@ const isOpen = ref(false)
           <router-link to="/transport">Transport</router-link>
           <router-link to="/favorites">Favorites</router-link>
           <router-link to="/bookings">Bookings</router-link>
+          <router-link to="/bookings">Contact</router-link>
+          <router-link to="/bookings">About Us</router-link>
         </nav>
       </div>
     </div>
@@ -85,6 +87,53 @@ const isOpen = ref(false)
       <router-view />
     </main>
   </div>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <!-- LOGO + ABOUT -->
+      <div class="footer-section">
+        <h2 class="logo">Bag n Ticket</h2>
+        <p>
+          Explore the world with us. We offer unforgettable journeys, premium accommodations and
+          unique travel experiences.
+        </p>
+      </div>
+
+      <!-- QUICK LINKS -->
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><router-link to="/">Home</router-link></li>
+          <li><router-link to="/destinations">Destinations</router-link></li>
+          <li><router-link to="/about">About</router-link></li>
+          <li><router-link to="/contact">Contact</router-link></li>
+        </ul>
+      </div>
+
+      <!-- TOP DESTINATIONS -->
+      <div class="footer-section">
+        <h3>Top Destinations</h3>
+        <ul>
+          <li>Bali</li>
+          <li>Paris</li>
+          <li>Dubai</li>
+          <li>Maldives</li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h3>Contact</h3>
+        <p>📍 Belgrade, Serbia</p>
+        <p>📞 +381 60 123 4567</p>
+        <p>📧 info@bagnticket.com</p>
+      </div>
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="footer-bottom">
+      <p>© 2026 BagnTicket. All rights reserved.</p>
+    </div>
+  </footer>
 </template>
 
 <style scoped>
@@ -404,5 +453,66 @@ const isOpen = ref(false)
 
 .dropdown-content a:hover {
   background: rgba(255, 255, 255, 0.4);
+}
+
+.footer {
+  background: #705519;
+  color: #ccc;
+  padding: 60px 20px 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.footer-container {
+  max-width: 1300px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+  text-align: center;
+}
+
+.footer-section h2.logo {
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.footer-section h3 {
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.footer-section p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+  color: #ccc;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.footer-section ul li a:hover {
+  color: #f5c542;
+  padding-left: 5px;
+}
+
+/* bottom bar */
+.footer-bottom {
+  border-top: 1px solid #ebebeb;
+  margin-top: 40px;
+  padding-top: 15px;
+  text-align: center;
+  font-size: 13px;
+  color: #ffffff;
 }
 </style>

@@ -14,6 +14,13 @@ function goToDetails(id: number) {
   })
 }
 
+function goToDetailsArr(id: number) {
+  router.push({
+    name: 'arrangement-details',
+    params: { id },
+  })
+}
+
 type Arrangement = {
   arr_id: number
   des_id: number
@@ -54,6 +61,24 @@ async function getPopDes() {
   }
 }
 
+const slider = ref<HTMLElement | null>(null)
+
+function scrollRight() {
+  if (!slider.value) return
+  slider.value.scrollBy({
+    left: slider.value.clientWidth,
+    behavior: 'smooth',
+  })
+}
+
+function scrollLeft() {
+  if (!slider.value) return
+  slider.value.scrollBy({
+    left: -slider.value.clientWidth,
+    behavior: 'smooth',
+  })
+}
+
 onMounted(() => {
   getPopDes()
   getLastMinDeals()
@@ -64,21 +89,42 @@ onMounted(() => {
   <div class="home">
     <section class="about">
       <div class="about-content">
-        <h1>We Create Unforgettable Travel Experiences</h1>
+        <!-- TOP -->
+        <div class="about-top">
+          <h1>We Create Unforgettable Travel Experiences</h1>
+          <h2>Discover. Explore. Enjoy.</h2>
+        </div>
 
-        <h2>Discover. Explore. Enjoy.</h2>
+        <!-- BOTTOM -->
+        <div class="about-bottom">
+          <!-- LEFT TEXT -->
+          <div class="about-text">
+            <p>
+              We are a modern travel agency specializing in tailor-made journeys, luxury vacations,
+              and unforgettable adventures across the world.
+            </p>
 
-        <p>
-          We are a modern travel agency specializing in tailor-made journeys, luxury vacations, and
-          unforgettable adventures across the world.
-        </p>
+            <p class="sub">
+              From tropical beaches to iconic cities, we connect you with the best destinations,
+              hand-picked hotels, and exclusive travel deals — all in one place. Our mission is to
+              turn your travel dreams into reality by offering personalized experiences designed
+              around your preferences, style, and budget. Whether you're looking for a relaxing
+              escape, a romantic getaway, or an exciting adventure, we ensure every detail is
+              carefully planned. With a passion for travel and a commitment to excellence, we
+              partner with trusted providers worldwide to deliver exceptional service, comfort, and
+              a lifetime.
+            </p>
+          </div>
 
-        <p class="sub">
-          From tropical beaches to iconic cities, we connect you with the best destinations,
-          hand-picked hotels, and exclusive travel deals — all in one place.
-        </p>
+          <!-- RIGHT IMAGE -->
+          <div class="about-image">
+            <img src="/public/images/travelagency.jpg" alt="travel image" />
+          </div>
+        </div>
       </div>
     </section>
+
+    <div class="section-divider"></div>
 
     <section class="featured">
       <h2>Popular Destinations</h2>
@@ -105,28 +151,87 @@ onMounted(() => {
       </div>
     </section>
 
-    <!-- LAST MINUTE DEALS -->
+    <div class="about-cta">
+      <div class="first">
+        <h3>Ready for your next adventure?</h3>
+        <p>
+          Explore our exclusive deals and find your perfect destination today. Discover hand-picked
+          experiences, luxury stays, and unforgettable adventures.
+        </p>
+
+        <button @click="$router.push('/destinations')">View Destinations</button>
+      </div>
+      <div class="second">
+        <img src="/src/videos-images/for-all/globe.png" />
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
     <section class="deals">
-      <h2>Last Minute Offers</h2>
+      <div class="deals-box">
+        <div class="deals-header">
+          <h2><img src="/src/videos-images/for-all/fire.png" /> Last Minute Offers</h2>
 
-      <div class="deals-grid">
-        <div
-          class="card-modern"
-          :class="{ big: index === 0 }"
-          v-for="(arr, index) in lastMinuteDeals"
-          :key="arr.arr_id"
-        >
-          <img v-if="arr.image" :src="imageUrl + arr.image" />
-          <div v-else class="no-img">No image</div>
+          <div class="controls">
+            <button @click="scrollLeft">‹</button>
+            <button @click="scrollRight">›</button>
+          </div>
+        </div>
 
-          <div class="card-title">
-            {{ arr.arr_title }}
+        <div class="deals-slider" ref="slider">
+          <div class="deal-card" v-for="arr in lastMinuteDeals" :key="arr.arr_id">
+            <img v-if="arr.image" :src="imageUrl + arr.image" />
+
+            <div class="deal-content">
+              <h3>{{ arr.arr_title }}</h3>
+              <p class="price">{{ arr.arr_price }}€</p>
+
+              <button @click="goToDetailsArr(arr.arr_id)">Book now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section class="transport">
+      <div class="transport-box">
+        <h2>
+          What's Your Favorite Way to Travel? <img src="/src/videos-images/for-all/earth.png" />
+        </h2>
+        <p class="subtitle">
+          Choose your preferred transport and discover journeys tailored just for you.
+        </p>
+
+        <div class="transport-options">
+          <div class="transport-card">
+            <img src="/src/videos-images/for-all/airplane.png" />
+            <h3>By Plane</h3>
+            <p>Fast, comfortable and perfect for long-distance adventures.</p>
+            <button>Explore Flights</button>
           </div>
 
-          <div class="card-badge">{{ arr.arr_price }}€</div>
+          <div class="transport-card">
+            <img src="/src/videos-images/for-all/bus.png" />
+            <h3>By Bus</h3>
+            <p>Affordable and scenic journeys across cities and countries.</p>
+            <button>Explore Bus Trips</button>
+          </div>
 
-          <div class="card-overlay">
-            <span>Book now</span>
+          <div class="transport-card">
+            <img src="/src/videos-images/for-all/car.png" />
+            <h3>By Car</h3>
+            <p>Freedom to travel at your own pace and explore hidden gems.</p>
+            <button>Explore Road Trips</button>
+          </div>
+
+          <div class="transport-card">
+            <img src="/src/videos-images/for-all/ship.png" />
+            <h3>By Ship</h3>
+            <p>Luxury cruises and relaxing journeys across beautiful seas.</p>
+            <button>Explore Cruises</button>
           </div>
         </div>
       </div>
@@ -139,19 +244,17 @@ onMounted(() => {
   padding-top: 280px;
 }
 
-.featured,
-.deals {
+.featured {
   text-align: center;
-  padding: 60px 20px;
+  padding: 20px 20px;
+  padding-bottom: 50px;
 }
 
-.featured h2,
-.deals h2 {
+.featured h2 {
   margin-bottom: 30px;
   font-size: 28px;
 }
 
-.deals-grid,
 .featured-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -160,12 +263,121 @@ onMounted(() => {
   margin: 0 auto;
 }
 
-.deals-grid {
-  grid-auto-rows: 250px;
-}
-
 .featured-grid {
   grid-auto-rows: 220px;
+}
+
+.deals {
+  padding: 20px 20px;
+}
+
+/* BOX */
+.deals-box {
+  max-width: 1300px;
+  margin: auto;
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* HEADER */
+.deals-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 25px;
+}
+
+.deals-header img {
+  height: 30px;
+}
+
+.deals-header h2 {
+  font-size: 28px;
+}
+
+/* ARROWS */
+.controls button {
+  background: #111;
+  color: #fff;
+  border: none;
+  margin-left: 10px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.controls button:hover {
+  background: #f5c542;
+  color: #000;
+}
+
+/* SLIDER */
+.deals-slider {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+
+.deals-slider::-webkit-scrollbar {
+  display: none;
+}
+
+/* CARD */
+.deal-card {
+  min-width: 260px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.deal-card:hover {
+  transform: translateY(-5px);
+}
+
+/* IMAGE */
+.deal-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+/* CONTENT */
+.deal-content {
+  padding: 15px;
+}
+
+.deal-content h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.price {
+  color: red;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.deal-content button {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background: #111;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.deal-content button:hover {
+  background: red;
 }
 
 /* BIG CARD (ZA OBA) */
@@ -308,40 +520,236 @@ onMounted(() => {
 }
 
 .about {
+  max-width: 1300px;
+  margin: auto;
+}
+
+/* TOP */
+.about-top {
   text-align: center;
-  max-width: 900px;
-  margin: 0 auto;
+  margin-top: 30px;
 }
 
-.about h1 {
-  font-size: 56px;
-  font-weight: 800;
-  line-height: 1.1;
-  color: #111;
-  opacity: 0.9;
-  margin-bottom: 25px;
+.about-top h1 {
+  font-size: 50px;
+  margin-bottom: 10px;
+  opacity: 0.8;
 }
 
-.about h2 {
-  font-size: 28px;
-  font-weight: bold;
+.about-top h2 {
+  font-size: 30px;
   color: #705519;
-  margin-bottom: 25px;
 }
 
-.about p {
-  font-size: 18px;
-  color: #555;
-  line-height: 1.8;
-  margin-bottom: 15px;
-  margin-top: 150px;
+/* BOTTOM */
+.about-bottom {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-top: 180px;
+  margin-bottom: 30px;
+  padding: 30px;
+
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.about p.sub {
+/* TEXT */
+.about-text {
+  flex: 1;
   font-size: 16px;
+  line-height: 1.7;
+}
+
+.about-text .sub {
+  margin-top: 15px;
+  color: #666;
+  font-size: 15px;
+}
+
+/* IMAGE */
+.about-image {
+  flex: 1;
+}
+
+.about-image img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .about-bottom {
+    flex-direction: column;
+  }
+
+  .about-image img {
+    height: 250px;
+  }
+}
+
+.about-cta {
+  padding: 20px 50px;
+
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 1300px;
+  margin: auto;
+  border-radius: 12px;
+  color: #111;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.about-cta h3 {
+  margin-bottom: 8px;
+}
+
+.second img {
+  height: 110px;
+}
+
+.about-cta p {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.about-cta button {
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.about-cta button:hover {
+  background: #333;
+  transform: translateY(-2px);
+}
+
+.transport {
+  padding: 20px 20px;
+  margin-bottom: 50px;
+}
+
+.transport-box {
+  max-width: 1300px;
+  margin: auto;
+  text-align: center;
+
+  background: #fff;
+  padding: 40px;
+  border-radius: 20px;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.transport-box img {
+  height: 25px;
+}
+
+.transport-box h2 {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
   color: #777;
-  max-width: 1100px;
-  margin: 0 auto;
-  margin-bottom: 80px;
+  margin-bottom: 40px;
+}
+
+/* GRID */
+.transport-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+/* CARD */
+.transport-card {
+  background: #f9f9f9;
+  border-radius: 16px;
+  padding: 25px 20px;
+
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.transport-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0, 0.15);
+}
+
+/* ICON */
+.transport-card img {
+  height: 60px;
+  margin-bottom: 15px;
+}
+
+/* TEXT */
+.transport-card h3 {
+  margin-bottom: 10px;
+}
+
+.transport-card p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+/* BUTTON */
+.transport-card button {
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.transport-card button:hover {
+  background: #f5c542;
+  color: #000;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .transport-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .transport-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  max-width: 1300px;
+  margin: auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #ddd;
 }
 </style>
