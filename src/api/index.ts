@@ -27,5 +27,7 @@ export default {
       params: { acc_id },
     }),
 
+  getArrangements: () => axios.get('front/arrangements'),
+
   loadGallery: (acc_id: number) => axios.get(`/front/images/gallery/${acc_id}`),
 }

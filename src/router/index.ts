@@ -6,6 +6,7 @@ import CategoriesView from '@/components/CategoriesView.vue'
 import DestinationDetails from '@/components/DestinationDetails.vue'
 import ArrangementDetails from '@/components/ArrangementDetails.vue'
 import AccomodationDetails from '@/components/AccomodationDetails.vue'
+import OffersView from '@/components/OffersView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,6 +36,11 @@ const router = createRouter({
       path: '/accomodation-details/:id',
       name: 'accomodation-details',
       component: AccomodationDetails,
+    },
+    {
+      path: '/offers',
+      name: 'offers',
+      component: OffersView,
     },
     {
       path: '/categories/:id',
