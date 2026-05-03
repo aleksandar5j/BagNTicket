@@ -73,12 +73,12 @@ const isOpen = ref(false)
             </div>
           </div>
           <router-link to="/offers">Offers</router-link>
-          <router-link to="/accommodations">Hotels</router-link>
+          <router-link to="/hotels">Hotels</router-link>
           <router-link to="/transport">Transport</router-link>
           <router-link to="/favorites">Favorites</router-link>
           <router-link to="/bookings">Bookings</router-link>
-          <router-link to="/bookings">Contact</router-link>
-          <router-link to="/bookings">About Us</router-link>
+          <router-link to="/contact">Contact</router-link>
+          <router-link to="/about">About Us</router-link>
         </nav>
       </div>
     </div>
