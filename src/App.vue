@@ -2,6 +2,10 @@
 import api from './api'
 import { ref, onMounted } from 'vue'
 
+import { useSessionStore } from './stores/sessionUser'
+
+const session = useSessionStore()
+
 type Category = {
   cat_id: number
   cat_name: string
@@ -46,9 +50,12 @@ const isOpen = ref(false)
             <a href="#"><img src="/src/videos-images/contacts/whatsapp.png" /></a>
           </div>
 
-          <div class="auth">
+          <div class="auth" v-if="!session.isLoggedIn">
             <router-link to="/login">Login</router-link>
-            <router-link to="/signup">Register</router-link>
+            <router-link to="/register">Register</router-link>
+          </div>
+          <div class="authh" v-else>
+            <router-link to="/" @click="session.logout" class="logout">Log Out</router-link>
           </div>
         </div>
       </div>
@@ -74,9 +81,8 @@ const isOpen = ref(false)
           </div>
           <router-link to="/offers">Offers</router-link>
           <router-link to="/hotels">Hotels</router-link>
-          <router-link to="/transport">Transport</router-link>
-          <router-link to="/favorites">Favorites</router-link>
-          <router-link to="/bookings">Bookings</router-link>
+          <router-link to="/favorites" v-if="session.isLoggedIn">Favorites</router-link>
+          <router-link to="/bookings" v-if="session.isLoggedIn">Bookings</router-link>
           <router-link to="/contact">Contact</router-link>
           <router-link to="/about">About Us</router-link>
         </nav>
@@ -514,5 +520,31 @@ const isOpen = ref(false)
   text-align: center;
   font-size: 13px;
   color: #ffffff;
+}
+
+.authh {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.authh a {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+
+.authh .logout {
+  background: #912a2a;
+  color: #ffffff;
+}
+
+.authh .logout:hover {
+  background-color: rgb(136, 0, 0);
+  transition: 0.2s;
 }
 </style>

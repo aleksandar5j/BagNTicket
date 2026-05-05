@@ -221,10 +221,10 @@ onMounted(() => {
           </div>
 
           <div class="transport-card">
-            <img src="/src/videos-images/for-all/car.png" />
-            <h3>By Car</h3>
+            <img src="/src/videos-images/for-all/train.png" />
+            <h3>By Train</h3>
             <p>Freedom to travel at your own pace and explore hidden gems.</p>
-            <button>Explore Road Trips</button>
+            <button>Explore Train Trips</button>
           </div>
 
           <div class="transport-card">

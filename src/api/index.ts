@@ -1,6 +1,24 @@
 import axios from './config'
 
+type LoginData = {
+  username: string
+  password: string
+}
+
+type RegisterData = {
+  fullname: string
+  username: string
+  password: string
+  email: string
+}
+
 export default {
+  userLogin: ({ username, password }: LoginData) =>
+    axios.post('auth/login', { username, password }),
+
+  userRegister: ({ fullname, username, password, email }: RegisterData) =>
+    axios.post('auth/register', { fullname, username, password, email }),
+
   getDestinations: () => axios.get('front/destinations'),
   getCategories: () => axios.get('front/categories'),
   filterArrByCat: (cat_id: number) =>
