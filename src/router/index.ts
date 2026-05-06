@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useSessionStore } from '@/stores/sessionUser'
 
 import HomeView from '@/components/HomeView.vue'
 import DestinationsView from '@/components/DestinationsView.vue'
@@ -12,6 +13,7 @@ import Login from '@/components/Login.vue'
 import Register from '@/components/Register.vue'
 import Contact from '@/components/Contact.vue'
 import About from '@/components/About.vue'
+import Favorites from '@/components/Favorites.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,11 +28,13 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login,
+      meta: { requiresAuth: false },
     },
     {
       path: '/register',
       name: 'register',
       component: Register,
+      meta: { requiresAuth: false },
     },
     {
       path: '/destinations',
@@ -38,8 +42,8 @@ const router = createRouter({
       component: DestinationsView,
     },
     {
-      path: '/destinations-details/:id',
-      name: 'destinations-details',
+      path: '/destination-details/:id',
+      name: 'destination-details',
       component: DestinationDetails,
     },
     {
@@ -77,6 +81,12 @@ const router = createRouter({
       name: 'about',
       component: About,
     },
+    {
+      path: '/favorites',
+      name: 'favorites',
+      component: Favorites,
+      meta: { requiresAuth: true },
+    },
   ],
 
   scrollBehavior(to, from, savedPosition) {
@@ -89,6 +99,23 @@ const router = createRouter({
       behavior: 'smooth',
     }
   },
+})
+
+router.beforeEach((to, from, next) => {
+  const session = useSessionStore()
+
+  if (to.meta.requiresAuth && !session.isLoggedIn) {
+    next('/login')
+    return
+  }
+
+  if ((to.name === 'login' || to.name === 'register') && session.isLoggedIn) {
+    next('/') // ili dashboard/home
+    return
+  }
+
+  // ✅ sve ok
+  next()
 })
 
 export default router

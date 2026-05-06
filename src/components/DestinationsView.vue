@@ -3,6 +3,10 @@ import { ref, onMounted, nextTick } from 'vue'
 import api from '@/api'
 import { imageUrl } from '@/api/config'
 
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 type Destination = {
   des_id: number
   des_name: string
@@ -22,6 +26,13 @@ async function getDestinations() {
   } catch (error) {
     console.log(error)
   }
+}
+
+function goToDetails(id: number) {
+  router.push({
+    name: 'destination-details',
+    params: { id },
+  })
 }
 
 const destinationsSection = ref<HTMLElement | null>(null)
@@ -57,7 +68,12 @@ onMounted(async () => {
       <h2>All Destinations</h2>
 
       <div class="grid">
-        <div class="card" v-for="dest in destinations" :key="dest.des_id">
+        <div
+          class="card"
+          v-for="dest in destinations"
+          :key="dest.des_id"
+          @click="goToDetails(dest.des_id)"
+        >
           <img v-if="dest.image" :src="imageUrl + dest.image" />
           <h3 v-else>No image</h3>
 

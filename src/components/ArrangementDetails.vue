@@ -33,14 +33,32 @@
             {{ arrangement.arr_available_to }}
           </p>
 
-          <button class="hotel-btn" @click="scroolTo()">Choose hotel</button>
-          <div class="warning">
-            <img src="/src/videos-images/for-all/warning.png" />
-            <p>If u dont choose hotel, we will choose random!</p>
-          </div>
+          <button class="hotel-btn" @click="scroolTo()">Choose other hotel</button>
 
           <button class="book-btn">Book now</button>
         </div>
+      </div>
+
+      <div class="divider-with-text">
+        <span>Transport details</span>
+      </div>
+
+      <div class="transport-details">
+        <p v-if="arrangement.tra_type">
+          You are travelling by <strong>{{ arrangement.tra_type }}</strong>
+        </p>
+        <p v-if="arrangement.tra_departure_location && arrangement.tra_departure_time">
+          Departure:
+          <strong>{{ arrangement.tra_departure_location }}</strong>
+          at <strong>{{ arrangement.tra_departure_time }}</strong>
+        </p>
+
+        <p v-if="arrangement.tra_arrival_location && arrangement.tra_arrival_time">
+          Arrival:
+          <strong>{{ arrangement.tra_arrival_location }}</strong>
+          at <strong>{{ arrangement.tra_arrival_time }}</strong>
+        </p>
+        <p v-else>Currently no info for this transport!</p>
       </div>
 
       <div class="divider-with-text">
@@ -50,7 +68,21 @@
       <div class="gallery">
         <div class="images">
           <div v-for="acc in accommodations" :key="acc.acc_id" class="acc-block">
-            <h3 style="text-align: center; opacity: 0.8">{{ acc.acc_name }}</h3>
+            <div class="hotel-info">
+              <h3 style="text-align: center; opacity: 0.9; font-size: 40px">{{ acc.acc_name }}</h3>
+              <div class="starss">
+                <img
+                  v-for="n in 5"
+                  :key="n"
+                  :src="
+                    n <= acc.acc_stars
+                      ? '/src/videos-images/for-all/star.png'
+                      : '/src/videos-images/for-all/emptystar.png'
+                  "
+                  class="star-iconn"
+                />
+              </div>
+            </div>
 
             <div class="acc-images" v-if="acc.images.length">
               <!-- VELIKA SLIKA -->
@@ -75,7 +107,7 @@
       </div>
 
       <div class="divider-with-text">
-        <span>Hotels</span>
+        <span>Other hotels</span>
       </div>
 
       <div class="accommodations" ref="accSection">
@@ -136,7 +168,6 @@ import { imageUrl } from '@/api/config'
 const accSection = ref(null)
 
 const route = useRoute()
-
 const router = useRouter()
 
 function goToDetails(id: number) {
@@ -179,6 +210,11 @@ type Arrangement = {
   arr_available_to: string
   arr_createdat: string
   image: string
+  tra_type: string
+  tra_departure_location: string
+  tra_arrival_location: string
+  tra_departure_time: string
+  tra_arrival_time: string
 }
 
 function scroolTo() {
@@ -312,6 +348,7 @@ function prev() {
 
 .hotel-btn {
   margin-top: 15px;
+  margin-bottom: 15px;
   width: 100%;
   padding: 12px;
   border: none;
@@ -511,5 +548,26 @@ function prev() {
 .star-icon {
   height: 20px;
   margin-right: 5px;
+}
+
+.starss {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.star-iconn {
+  height: 40px;
+  margin-right: 5px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.hotel-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
 }
 </style>

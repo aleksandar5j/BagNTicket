@@ -9,7 +9,7 @@ const router = useRouter()
 
 function goToDetails(id: number) {
   router.push({
-    name: 'destinations-details',
+    name: 'destination-details',
     params: { id },
   })
 }

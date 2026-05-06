@@ -378,6 +378,7 @@ function prev() {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-bottom: 50px;
 }
 
 .hotel-card {

@@ -12,6 +12,14 @@ type RegisterData = {
   email: string
 }
 
+type FilterData = {
+  arr_title?: string
+  from?: string
+  to?: string
+  category?: number
+  price?: 'low' | 'high'
+}
+
 export default {
   userLogin: ({ username, password }: LoginData) =>
     axios.post('auth/login', { username, password }),
@@ -49,4 +57,11 @@ export default {
   getAccommodations: () => axios.get('front/accommodations'),
 
   loadGallery: (acc_id: number) => axios.get(`/front/images/gallery/${acc_id}`),
+
+  filterArrangements: (filters: FilterData) =>
+    axios.get('front/arrangements/filter', {
+      params: filters,
+    }),
+
+  getFavorites: (usr_id: number) => axios.get('/front/favorites', { params: { usr_id } }),
 }

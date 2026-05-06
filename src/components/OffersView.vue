@@ -10,38 +10,51 @@
       </p>
 
       <div class="filterSection">
-        <!-- LEFT: SEARCH -->
         <div class="filter-left">
-          <input type="text" ref="searchArr" class="search" placeholder="Search offers..." />
+          <input
+            type="text"
+            v-model="searchArr"
+            @input="handleInput"
+            class="search"
+            placeholder="Search offers..."
+          />
         </div>
 
-        <!-- RIGHT: FILTERS -->
         <div class="filter-right">
-          <input type="date" ref="from" />
-          <input type="date" ref="to" />
+          <label>from</label>
+          <input type="date" v-model="from" />
+          <label>to</label>
+          <input type="date" v-model="to" />
 
-          <!-- CATEGORY -->
-          <select ref="category">
-            <option value="">All Categories</option>
-            <option value="1">Luxury</option>
-            <option value="2">Adventure</option>
-            <option value="3">City Break</option>
+          <select v-model="category" @change="searchArrFun">
+            <option :value="undefined">Category</option>
+
+            <option v-for="cat in categories" :key="cat.cat_id" :value="cat.cat_id">
+              {{ cat.cat_name }}
+            </option>
           </select>
 
-          <!-- PRICE -->
-          <select ref="price">
-            <option value="">Price</option>
+          <select v-model="price" @change="searchArrFun">
+            <option :value="undefined">Price</option>
             <option value="low">Low → High</option>
             <option value="high">High → Low</option>
           </select>
 
-          <button class="filter-btn">Search</button>
+          <button class="filter-btn" @click="searchArrFun">Search</button>
+          <button class="filter-resetbtn" @click="resetFilters">
+            <img src="/src/videos-images/for-all/reset.png" />
+          </button>
         </div>
       </div>
 
       <section class="section">
         <div class="arr-grid" v-if="arrangements.length">
-          <div class="arr-card" v-for="arr in arrangements" :key="arr.arr_id">
+          <div
+            class="arr-card"
+            v-for="arr in arrangements"
+            :key="arr.arr_id"
+            @click="goToDetails(arr.arr_id)"
+          >
             <div class="arr-image">
               <img :src="imageUrl + arr.image" />
 
@@ -59,15 +72,19 @@
             </div>
           </div>
         </div>
+        <div v-else>
+          <h1>No result</h1>
+        </div>
       </section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import api from '@/api'
 import { imageUrl } from '@/api/config'
+import { useRouter } from 'vue-router'
 
 type Arrangement = {
   arr_id: number
@@ -88,10 +105,83 @@ type Arrangement = {
   image: string
 }
 
+type Category = {
+  cat_id: string
+  cat_name: string
+}
+
+const router = useRouter()
+
+function goToDetails(id: number) {
+  router.push({
+    name: 'arrangement-details',
+    params: { id },
+  })
+}
+
+const searchArr = ref('')
+const from = ref()
+const to = ref()
+const category = ref<string | undefined>(undefined)
+const price = ref<string | undefined>(undefined)
+
+watch([from, to], () => {
+  searchArr.value = ''
+  category.value = undefined
+  price.value = undefined
+
+  searchArrFun()
+})
+
+async function searchArrFun() {
+  try {
+    const res = await api.filterArrangements({
+      arr_title: searchArr.value || undefined,
+      from: from.value || undefined,
+      to: to.value || undefined,
+      category: category.value,
+      price: price.value,
+    })
+
+    arrangements.value = res.data.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function resetFilters() {
+  searchArr.value = ''
+  from.value = undefined
+  to.value = undefined
+  category.value = undefined
+  price.value = undefined
+
+  const res = await api.getArrangements()
+  arrangements.value = res.data.data
+}
+
+const categories = ref<Category[]>([])
+
+async function getCat() {
+  try {
+    const res = await api.getCategories()
+    categories.value = res.data.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+onMounted(() => {
+  getCat()
+  searchArrFun()
+})
+
 const arrangements = ref<Arrangement[]>([])
 
 onMounted(async () => {
   try {
+    await getCat()
+
     const res = await api.getArrangements()
     console.log(res.data)
     arrangements.value = res.data.data
@@ -99,6 +189,16 @@ onMounted(async () => {
     console.error('API ERROR:', err)
   }
 })
+
+let timeout: any
+
+function handleInput() {
+  clearTimeout(timeout)
+
+  timeout = setTimeout(() => {
+    searchArrFun()
+  }, 400)
+}
 </script>
 
 <style scoped>
@@ -341,5 +441,23 @@ onMounted(async () => {
 
 .filter-btn:hover {
   background: #8a6a22;
+}
+
+.filter-resetbtn {
+  background: #705519;
+  color: #fff;
+  border: none;
+  padding: 5px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.filter-resetbtn img {
+  height: 30px;
+  border-radius: 20px;
+  filter: invert(1);
 }
 </style>

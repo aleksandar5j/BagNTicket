@@ -15,15 +15,21 @@
 
       <section class="hero" v-if="destination">
         <img v-if="destination.image" :src="imageUrl + destination.image" class="hero-img" />
+        <div class="hero-overlay">
+          <h2>{{ destination.des_name }}</h2>
+          <p>{{ destination.des_country }}</p>
+        </div>
       </section>
 
       <section class="about" v-if="destination">
         <p style="text-align: center; padding-bottom: 30px">{{ destination.des_description }}</p>
       </section>
 
-      <section class="section">
-        <h2>Available Arrangements</h2>
+      <div class="divider-with-text">
+        <span>Available arrangements</span>
+      </div>
 
+      <section class="section">
         <div class="arr-grid" v-if="arrangements.length">
           <div
             class="arr-card"
@@ -46,10 +52,16 @@
             </div>
           </div>
         </div>
+        <div v-else>
+          <h1 style="color: #888; text-align: center">No arrangements available!</h1>
+        </div>
       </section>
 
+      <div class="divider-with-text">
+        <span>Hotels & Accommodations</span>
+      </div>
+
       <section class="section">
-        <h2>Hotels & Accommodations</h2>
         <div class="hotel-grid" v-if="accommodations.length">
           <div class="hotel-card" v-for="acc in accommodations" :key="acc.acc_id">
             <img :src="imageUrl + acc.image" />
@@ -72,6 +84,9 @@
               </div>
             </div>
           </div>
+        </div>
+        <div v-else>
+          <h1 style="color: #888; text-align: center">No accommodations available!</h1>
         </div>
       </section>
     </div>
@@ -172,12 +187,14 @@ onMounted(async () => {
 }
 
 .hero {
-  margin-bottom: 30px;
+  position: relative;
+  height: 600px;
+  margin-bottom: 40px;
 }
 
 .hero-img {
   width: 100%;
-  height: 500px;
+  height: 600px;
   object-fit: cover;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -408,5 +425,39 @@ onMounted(async () => {
 section h2 {
   text-align: center;
   margin-bottom: 20px;
+}
+
+.divider-with-text {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 60px 0;
+}
+
+.divider-with-text::before,
+.divider-with-text::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #ddd;
+}
+
+.divider-with-text span {
+  padding: 0 15px;
+  color: #888;
+  font-size: 30px;
+}
+
+.hero-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+
+  padding: 15px 20px;
+  border-radius: 12px;
+  color: white;
 }
 </style>

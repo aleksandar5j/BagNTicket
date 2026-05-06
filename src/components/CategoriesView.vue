@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ref, onMounted, watch, computed } from 'vue'
 import api from '@/api'
 
 import { imageUrl } from '@/api/config'
 
 const route = useRoute()
+const router = useRouter()
+
+function goToDetails(id: number) {
+  router.push({
+    name: 'arrangement-details',
+    params: { id },
+  })
+}
 
 type Arrangement = {
   arr_id: number
@@ -59,7 +67,12 @@ watch(
       </div>
 
       <div class="grid">
-        <div class="card" v-for="arr in arrangements" :key="arr.arr_id">
+        <div
+          class="card"
+          v-for="arr in arrangements"
+          :key="arr.arr_id"
+          @click="goToDetails(arr.arr_id)"
+        >
           <img v-if="arr.image" :src="imageUrl + arr.image" />
           <div v-else class="no-img">No image</div>
 
@@ -87,6 +100,7 @@ watch(
 <style scoped>
 .page {
   padding-top: 330px;
+  margin-bottom: 50px;
 }
 
 .arrangements {
