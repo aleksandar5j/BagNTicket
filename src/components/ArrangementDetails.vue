@@ -58,7 +58,7 @@
           <strong>{{ arrangement.tra_arrival_location }}</strong>
           at <strong>{{ arrangement.tra_arrival_time }}</strong>
         </p>
-        <p v-else>Currently no info for this transport!</p>
+        <p v-else>Currently no transport for this arragnement!</p>
       </div>
 
       <div class="divider-with-text">
@@ -88,12 +88,14 @@
               <!-- VELIKA SLIKA -->
               <div class="main-img">
                 <img :src="imageUrl + acc.images[0]" @click="openGallery(acc, 0)" />
+                <div class="img-overlay"></div>
               </div>
 
               <!-- DESNI GRID -->
               <div class="thumb-grid">
                 <div class="thumb" v-for="(img, i) in acc.images.slice(1, 6)" :key="i">
                   <img :src="imageUrl + img" @click="openGallery(acc, i + 1)" />
+                  <div class="img-overlay"></div>
                 </div>
 
                 <!-- +MORE OVERLAY -->
@@ -295,7 +297,7 @@ function prev() {
 .hero-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: inherit;
   border-radius: 20px;
 }
 
@@ -449,6 +451,40 @@ function prev() {
   object-fit: cover;
   border-radius: 12px;
   cursor: pointer;
+}
+
+.main-img,
+.thumb {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.img-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: 0.3s ease;
+  pointer-events: none;
+}
+
+.main-img:hover .img-overlay,
+.thumb:hover .img-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.main-img img,
+.thumb img {
+  transition: transform 0.3s ease;
+}
+
+.main-img:hover img,
+.thumb:hover img {
+  transform: scale(1.05);
+}
+
+.thumb img:hover {
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .more {

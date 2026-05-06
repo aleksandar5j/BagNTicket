@@ -41,11 +41,13 @@
           <div class="acc-images" v-if="acc.images.length">
             <div class="main-img">
               <img :src="imageUrl + acc.images[0]" @click="openGallery(acc, 0)" />
+              <div class="img-overlay"></div>
             </div>
 
             <div class="thumb-grid">
               <div class="thumb" v-for="(img, i) in acc.images.slice(1, 6)" :key="i">
                 <img :src="imageUrl + img" @click="openGallery(acc, i + 1)" />
+                <div class="img-overlay"></div>
               </div>
 
               <div v-if="acc.images.length > 6" class="more" @click="openGallery(acc, 0)">
@@ -394,7 +396,36 @@ function prev() {
   min-height: 100px;
 }
 
-/* LEFT IMAGE (15%) */
+.main-img,
+.thumb {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.img-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: 0.3s ease;
+  pointer-events: none;
+}
+
+.main-img:hover .img-overlay,
+.thumb:hover .img-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.main-img img,
+.thumb img {
+  transition: transform 0.3s ease;
+}
+
+.main-img:hover img,
+.thumb:hover img {
+  transform: scale(1.05);
+}
+
 .room-img {
   width: 20%;
   height: 150px;
