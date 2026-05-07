@@ -58,14 +58,18 @@
           <strong>{{ arrangement.tra_arrival_location }}</strong>
           at <strong>{{ arrangement.tra_arrival_time }}</strong>
         </p>
-        <p v-else>Currently no transport for this arragnement!</p>
+        <div v-else>
+          <h1 style="text-align: center; color: #888; padding-bottom: 100px">
+            Currently no transport for this trip!
+          </h1>
+        </div>
       </div>
 
       <div class="divider-with-text">
         <span>Gallery</span>
       </div>
 
-      <div class="gallery">
+      <div class="gallery" v-if="accommodations.length">
         <div class="images">
           <div v-for="acc in accommodations" :key="acc.acc_id" class="acc-block">
             <div class="hotel-info">
@@ -108,11 +112,17 @@
         </div>
       </div>
 
+      <div v-else>
+        <h1 style="text-align: center; color: #888; padding-bottom: 100px">
+          Currently no photos for this trip!
+        </h1>
+      </div>
+
       <div class="divider-with-text">
         <span>Other hotels</span>
       </div>
 
-      <div class="accommodations" ref="accSection">
+      <div class="accommodations" ref="accSection" v-if="accommodations.length">
         <div class="acc-grid">
           <div
             v-for="acc in accommodations"
@@ -146,6 +156,11 @@
             </div>
           </div>
         </div>
+      </div>
+      <div v-else>
+        <h1 style="text-align: center; color: #888; padding-bottom: 150px">
+          Currently no accommodations for this trip!
+        </h1>
       </div>
     </div>
   </div>

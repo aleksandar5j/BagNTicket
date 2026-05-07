@@ -63,7 +63,12 @@
 
       <section class="section">
         <div class="hotel-grid" v-if="accommodations.length">
-          <div class="hotel-card" v-for="acc in accommodations" :key="acc.acc_id">
+          <div
+            class="hotel-card"
+            v-for="acc in accommodations"
+            :key="acc.acc_id"
+            @click="goToDetailsAcc(acc.acc_id)"
+          >
             <img :src="imageUrl + acc.image" />
 
             <!-- hover -->
@@ -106,6 +111,13 @@ const router = useRouter()
 function goToDetails(id: number) {
   router.push({
     name: 'arrangement-details',
+    params: { id },
+  })
+}
+
+function goToDetailsAcc(id: number) {
+  router.push({
+    name: 'accomodation-details',
     params: { id },
   })
 }

@@ -13,6 +13,18 @@ type Destination = {
   image: string
 }
 
+const searchDest = ref('')
+
+async function filterDest() {
+  try {
+    const res = await api.filterDestinations(searchDest.value)
+    destinations.value = res.data.data
+    console.log(res.data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const destinations = ref<Destination[]>([])
 
 async function getDestinations() {
@@ -40,6 +52,7 @@ const destinationsSection = ref<HTMLElement | null>(null)
 onMounted(async () => {
   await getDestinations()
   await nextTick()
+  await filterDest()
 
   destinationsSection.value?.scrollIntoView({
     behavior: 'smooth',
@@ -58,13 +71,13 @@ onMounted(async () => {
           unforgettable memories.
         </p>
         <div class="search-box">
-          <input type="text" placeholder="Where do you want to go?" />
-          <button>Search</button>
+          <input type="text" placeholder="Where do you want to go?" v-model="searchDest" />
+          <button @click="filterDest">Search</button>
         </div>
       </div>
     </section>
 
-    <section ref="destinationsSection" class="destinations">
+    <section ref="destinationsSection" class="destinations" v-if="destinations.length">
       <h2>All Destinations</h2>
 
       <div class="grid">
@@ -86,6 +99,9 @@ onMounted(async () => {
         </div>
       </div>
     </section>
+    <div v-else>
+      <h1 style="text-align: center">No result</h1>
+    </div>
   </div>
 </template>
 
@@ -157,6 +173,7 @@ onMounted(async () => {
   justify-content: center;
   max-width: 1300px;
   margin: 0 auto;
+  margin-bottom: 100px;
 }
 
 .card {

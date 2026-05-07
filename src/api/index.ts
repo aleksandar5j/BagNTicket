@@ -20,6 +20,12 @@ type FilterData = {
   price?: 'low' | 'high'
 }
 
+type FilterHotelData = {
+  acc_name?: string
+  acc_type?: string
+  acc_stars?: number
+}
+
 export default {
   userLogin: ({ username, password }: LoginData) =>
     axios.post('auth/login', { username, password }),
@@ -63,5 +69,16 @@ export default {
       params: filters,
     }),
 
+  filterDestinations: (des_name: string) =>
+    axios.get('front/destinations/search', { params: { des_name } }),
+
+  filterAccommodations: (filter: FilterHotelData) =>
+    axios.get('front/accommodations/filter', { params: filter }),
+
   getFavorites: (usr_id: number) => axios.get('/front/favorites', { params: { usr_id } }),
+
+  getTransport: () => axios.get('/front/transport'),
+
+  getTransportArrangements: (tra_id: number) =>
+    axios.get('/front/transport/details', { params: { tra_id } }),
 }

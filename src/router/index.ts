@@ -14,6 +14,7 @@ import Register from '@/components/Register.vue'
 import Contact from '@/components/Contact.vue'
 import About from '@/components/About.vue'
 import Favorites from '@/components/Favorites.vue'
+import TransportDetails from '@/components/TransportDetails.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,6 +81,11 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: About,
+    },
+    {
+      path: '/transport-arrangements/:id',
+      name: 'transport-arrangements',
+      component: TransportDetails,
     },
     {
       path: '/favorites',

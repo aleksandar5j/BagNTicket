@@ -13,33 +13,43 @@
       <div class="filterSection">
         <!-- LEFT: SEARCH -->
         <div class="filter-left">
-          <input type="text" ref="searchHotels" class="search" placeholder="Search hotels..." />
+          <input type="text" v-model="searchHotels" class="search" placeholder="Search hotels..." />
         </div>
 
         <!-- RIGHT: FILTERS -->
         <div class="filter-right">
           <!-- CATEGORY -->
-          <select ref="category">
-            <option value="">All Categories</option>
-            <option value="1">Luxury</option>
-            <option value="2">Adventure</option>
-            <option value="3">City Break</option>
+          <select v-model="stars">
+            <option value="" disabled selected>Stars</option>
+
+            <option v-for="star in uniqueStars" :key="star" :value="star">
+              {{ '⭐'.repeat(Number(star)) }}
+            </option>
           </select>
 
           <!-- PRICE -->
-          <select ref="price">
-            <option value="">Price</option>
-            <option value="low">Low → High</option>
-            <option value="high">High → Low</option>
+          <select v-model="type">
+            <option value="">Type</option>
+            <option v-for="type in uniqueTypes" :key="type" :value="type">
+              {{ type }}
+            </option>
           </select>
 
-          <button class="filter-btn">Search</button>
+          <button class="filter-btn" @click="filterHotels">Search</button>
+          <button class="filter-resetbtn" @click="resetFilters">
+            <img src="/src/videos-images/for-all/reset.png" />
+          </button>
         </div>
       </div>
 
       <section class="section">
         <div class="arr-grid" v-if="accommodations.length">
-          <div class="arr-card" v-for="acc in accommodations" :key="acc.acc_id">
+          <div
+            class="arr-card"
+            v-for="acc in accommodations"
+            :key="acc.acc_id"
+            @click="goToDetailsAcc(acc.acc_id)"
+          >
             <div class="arr-image">
               <img :src="imageUrl + acc.image" />
 
@@ -68,15 +78,33 @@
             </div>
           </div>
         </div>
+
+        <div v-else>
+          <h1 style="text-align: center">No result</h1>
+        </div>
       </section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import api from '@/api'
 import { imageUrl } from '@/api/config'
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+function goToDetailsAcc(id: number) {
+  router.push({
+    name: 'accomodation-details',
+    params: { id },
+  })
+}
+
+const searchHotels = ref('')
+const stars = ref('')
+const type = ref('')
 
 type Accommodation = {
   acc_id: number
@@ -87,12 +115,45 @@ type Accommodation = {
   image: string
 }
 
+const uniqueStars = computed(() => {
+  return [...new Set(allAccommodations.value.map((acc) => acc.acc_stars))]
+})
+
+const uniqueTypes = computed(() => {
+  return [...new Set(allAccommodations.value.map((acc) => acc.acc_type))]
+})
+
+async function resetFilters() {
+  searchHotels.value = ''
+  stars.value = ''
+  type.value = ''
+
+  const res = await api.getAccommodations()
+  accommodations.value = res.data.data
+}
+
+async function filterHotels() {
+  try {
+    const res = await api.filterAccommodations({
+      acc_name: searchHotels.value,
+      acc_stars: stars.value,
+      acc_type: type.value,
+    })
+
+    accommodations.value = res.data.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const allAccommodations = ref<Accommodation[]>([])
 const accommodations = ref<Accommodation[]>([])
 
 onMounted(async () => {
   try {
     const res = await api.getAccommodations()
     console.log(res.data)
+    allAccommodations.value = res.data.data
     accommodations.value = res.data.data
   } catch (err) {
     console.error('API ERROR:', err)
@@ -343,5 +404,23 @@ onMounted(async () => {
 
 .filter-btn:hover {
   background: #8a6a22;
+}
+
+.filter-resetbtn {
+  background: #705519;
+  color: #fff;
+  border: none;
+  padding: 5px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.filter-resetbtn img {
+  height: 30px;
+  border-radius: 20px;
+  filter: invert(1);
 }
 </style>

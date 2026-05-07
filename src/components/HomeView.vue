@@ -21,6 +21,13 @@ function goToDetailsArr(id: number) {
   })
 }
 
+function goToDetailsTra(id: number) {
+  router.push({
+    name: 'transport-arrangements',
+    params: { id },
+  })
+}
+
 type Arrangement = {
   arr_id: number
   des_id: number
@@ -35,6 +42,66 @@ type Arrangement = {
   arr_createdat: Date
   image: string
   cat_name: string
+}
+
+type Transport = {
+  tra_id: number
+  arr_id: number
+  tra_type: string
+  tra_departure_location: string
+  tra_arrival_location: string
+  tra_departure_time: Date
+  tra_arrival_time: Date
+}
+
+const transports = ref<Transport[]>([])
+
+async function getTransports() {
+  try {
+    const res = await api.getTransport()
+    transports.value = res.data.data
+    console.log(res.data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+function getTransportImage(type: string) {
+  switch (type.toLowerCase()) {
+    case 'plane':
+      return '/src/videos-images/for-all/airplane.png'
+
+    case 'bus':
+      return '/src/videos-images/for-all/bus.png'
+
+    case 'train':
+      return '/src/videos-images/for-all/train.png'
+
+    case 'ship':
+      return '/src/videos-images/for-all/ship.png'
+
+    default:
+      return '/src/videos-images/for-all/transport.png'
+  }
+}
+
+function getTransportDescription(type: string) {
+  switch (type.toLowerCase()) {
+    case 'plane':
+      return 'Fast, comfortable and perfect for long-distance adventures.'
+
+    case 'bus':
+      return 'Affordable and flexible travel for discovering new places.'
+
+    case 'train':
+      return 'Relaxing journeys with scenic views and extra comfort.'
+
+    case 'ship':
+      return 'Enjoy unforgettable travel experiences across the sea.'
+
+    default:
+      return 'Travel comfortably to your dream destination.'
+  }
 }
 
 const lastMinuteDeals = ref<Arrangement[]>([])
@@ -82,6 +149,7 @@ function scrollLeft() {
 onMounted(() => {
   getPopDes()
   getLastMinDeals()
+  getTransports()
 })
 </script>
 
@@ -206,32 +274,19 @@ onMounted(() => {
         </p>
 
         <div class="transport-options">
-          <div class="transport-card">
-            <img src="/src/videos-images/for-all/airplane.png" />
-            <h3>By Plane</h3>
-            <p>Fast, comfortable and perfect for long-distance adventures.</p>
-            <button>Explore Flights</button>
-          </div>
+          <div
+            class="transport-card"
+            v-for="tra in transports"
+            :key="tra.tra_id"
+            @click="goToDetailsTra(tra.tra_id)"
+          >
+            <img :src="getTransportImage(tra.tra_type)" class="transport-icon" />
 
-          <div class="transport-card">
-            <img src="/src/videos-images/for-all/bus.png" />
-            <h3>By Bus</h3>
-            <p>Affordable and scenic journeys across cities and countries.</p>
-            <button>Explore Bus Trips</button>
-          </div>
+            <h3>By {{ tra.tra_type }}</h3>
 
-          <div class="transport-card">
-            <img src="/src/videos-images/for-all/train.png" />
-            <h3>By Train</h3>
-            <p>Freedom to travel at your own pace and explore hidden gems.</p>
-            <button>Explore Train Trips</button>
-          </div>
+            <p>{{ getTransportDescription(tra.tra_type) }}</p>
 
-          <div class="transport-card">
-            <img src="/src/videos-images/for-all/ship.png" />
-            <h3>By Ship</h3>
-            <p>Luxury cruises and relaxing journeys across beautiful seas.</p>
-            <button>Explore Cruises</button>
+            <button>Explore {{ tra.tra_type }} trips</button>
           </div>
         </div>
       </div>
