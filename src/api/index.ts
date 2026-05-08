@@ -33,7 +33,10 @@ export default {
   userRegister: ({ fullname, username, password, email }: RegisterData) =>
     axios.post('auth/register', { fullname, username, password, email }),
 
-  getDestinations: () => axios.get('front/destinations'),
+  getDestinations: (usr_id: number) =>
+    axios.get('front/destinations', {
+      params: { usr_id },
+    }),
   getCategories: () => axios.get('front/categories'),
   filterArrByCat: (cat_id: number) =>
     axios.get('front/categories/filterArrangements', {
@@ -41,7 +44,10 @@ export default {
     }),
 
   //--- HOME PAGE ---//
-  popularDest: () => axios.get('front/destinations/popular'),
+  popularDest: (usr_id: number) =>
+    axios.get('front/destinations/popular', {
+      params: { usr_id },
+    }),
   lastMinuteDeals: () => axios.get('front/destinations/lastminute'),
 
   getDestinationDetails: (des_id: number) =>
@@ -76,9 +82,15 @@ export default {
     axios.get('front/accommodations/filter', { params: filter }),
 
   getFavorites: (usr_id: number) => axios.get('/front/favorites', { params: { usr_id } }),
+  postFavorite: (usr_id: number, des_id: number) =>
+    axios.post('front/favorites', { usr_id, des_id }),
+  removeFavorite: (usr_id: number, des_id: number) =>
+    axios.delete('front/favorites', {
+      data: { usr_id, des_id },
+    }),
 
   getTransport: () => axios.get('/front/transport'),
 
-  getTransportArrangements: (tra_id: number) =>
-    axios.get('/front/transport/details', { params: { tra_id } }),
+  getTransportArrangements: (tra_type: string) =>
+    axios.get('/front/transport/details', { params: { tra_type } }),
 }

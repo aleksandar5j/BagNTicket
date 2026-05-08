@@ -387,7 +387,7 @@ function handleInput() {
 
 /* LEFT */
 .filter-left {
-  flex: 1.5; /* 🔥 više prostora za search */
+  flex: 1.5;
 }
 
 .search {

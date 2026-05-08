@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import api from '@/api'
@@ -22,14 +23,25 @@ type Destination = {
   image: string
 }
 
+async function removeFav(id: number) {
+  try {
+    const res = await api.removeFavorite(session.user.usr_id, id)
+    await getFavorites()
+    console.log(res.data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const favorites = ref<Destination[]>([])
 
 async function getFavorites() {
   try {
-    if (!session.sid) return
+    if (!session.user?.usr_id) return
 
     const res = await api.getFavorites(session.user.usr_id)
     favorites.value = res.data.data
+    console.log(res.data)
   } catch (error) {
     console.log(error)
   }
@@ -65,7 +77,7 @@ onMounted(() => {
           <div class="card-image">
             <img :src="imageUrl + fav.image" />
 
-            <div class="isFavorite">
+            <div class="isFavorite" @click.stop="removeFav(fav.des_id)">
               <img class="heart-full" src="/src/videos-images/for-all/heart.png" />
               <img class="heart-empty" src="/src/videos-images/for-all/emptyheart.png" />
             </div>
@@ -78,9 +90,9 @@ onMounted(() => {
         </div>
       </div>
 
-      <div v-else class="no-fav">
+      <div v-else class="no-fav" style="margin-top: 200px; margin-bottom: 150px">
         <h2>No favorites yet</h2>
-        <p>Start exploring and save your dream destinations ✈️</p>
+        <p>Start exploring and save your dream destinations</p>
       </div>
     </div>
   </div>

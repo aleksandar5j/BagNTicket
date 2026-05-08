@@ -4,8 +4,13 @@ import api from '@/api'
 import { ref, onMounted } from 'vue'
 
 import { useRouter } from 'vue-router'
+import { useSessionStore } from '@/stores/sessionUser'
+
+const session = useSessionStore()
 
 const router = useRouter()
+
+const userId = session.user?.usr_id || null
 
 function goToDetails(id: number) {
   router.push({
@@ -21,10 +26,10 @@ function goToDetailsArr(id: number) {
   })
 }
 
-function goToDetailsTra(id: number) {
+function goToDetailsTra(type: string) {
   router.push({
     name: 'transport-arrangements',
-    params: { id },
+    params: { tra_type: type },
   })
 }
 
@@ -115,16 +120,39 @@ async function getLastMinDeals() {
   }
 }
 
-type Destination = { des_id: number; des_name: string; des_country: string; image: string }
+type Destination = {
+  des_id: number
+  des_name: string
+  des_country: string
+  image: string
+  fav_id: number
+}
 
 const popularDestinations = ref<Destination[]>([])
 
 async function getPopDes() {
   try {
-    const res = await api.popularDest()
+    const res = await api.popularDest(userId)
     popularDestinations.value = res.data.data
   } catch (error) {
     console.log(error)
+  }
+}
+
+async function postFav(id: number) {
+  const dest = popularDestinations.value.find((d) => d.des_id === id)
+  if (!dest) return
+
+  try {
+    if (dest.fav_id) {
+      await api.removeFavorite(session.user.usr_id, id)
+    } else {
+      await api.postFavorite(session.user.usr_id, id)
+    }
+
+    await getPopDes() // jedini izvor istine
+  } catch (err) {
+    console.log(err)
   }
 }
 
@@ -205,6 +233,15 @@ onMounted(() => {
           :key="dest.des_id"
           @click="goToDetails(dest.des_id)"
         >
+          <div class="isFavorite" @click.stop="postFav(dest.des_id)" v-if="session.isLoggedIn">
+            <img
+              :src="
+                dest.fav_id
+                  ? '/src/videos-images/for-all/heart.png'
+                  : '/src/videos-images/for-all/emptyheart.png'
+              "
+            />
+          </div>
           <img v-if="dest.image" :src="imageUrl + dest.image" />
           <div v-else class="no-img">No image</div>
 
@@ -278,7 +315,7 @@ onMounted(() => {
             class="transport-card"
             v-for="tra in transports"
             :key="tra.tra_id"
-            @click="goToDetailsTra(tra.tra_id)"
+            @click="goToDetailsTra(tra.tra_type)"
           >
             <img :src="getTransportImage(tra.tra_type)" class="transport-icon" />
 
@@ -806,5 +843,51 @@ onMounted(() => {
   flex: 1;
   height: 1px;
   background: #ddd;
+}
+
+.isFavorite {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  z-index: 50; /* 🔥 BITNO */
+  border: 2px solid white;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.isFavorite img {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+  transition: 0.25s ease;
+}
+
+.heart-empty {
+  opacity: 0;
+}
+
+.isFavorite:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+  transition: 0.2s ease;
+}
+
+.isFavorite:hover .heart-full {
+  opacity: 0;
+  transform: scale(1.2);
+}
+
+.isFavorite:hover .heart-empty {
+  opacity: 1;
+  transform: scale(1);
+  filter: invert(1);
 }
 </style>

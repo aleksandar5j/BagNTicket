@@ -146,13 +146,6 @@
                   class="star-icon"
                 />
               </div>
-
-              <div class="rooms">
-                <div v-for="room in acc.rooms" :key="room.rom_id" class="room">
-                  <p>{{ room.rom_type }}</p>
-                  <p>{{ room.rom_price_per_night }}€/night</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -441,14 +434,16 @@ function prev() {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
   gap: 10px;
-  height: 550px;
+  height: 560px;
+  overflow: hidden;
+  align-items: stretch;
 }
 
 .main-img img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   border-radius: 12px;
+  object-fit: inherit;
   cursor: pointer;
 }
 

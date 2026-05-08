@@ -171,7 +171,7 @@ onMounted(async () => {
   margin: 0 auto;
 
   display: flex;
-  flex-direction: column; /* 🔥 KLJUČNO */
+  flex-direction: column;
   align-items: center;
   text-align: center;
   justify-content: center;
@@ -200,7 +200,6 @@ onMounted(async () => {
   gap: 25px;
 }
 
-/* CARD */
 .arr-card {
   height: 300px;
   border-radius: 16px;
@@ -217,7 +216,6 @@ onMounted(async () => {
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
 }
 
-/* IMAGE */
 .arr-image {
   width: 100%;
   height: 100%;
@@ -235,7 +233,6 @@ onMounted(async () => {
   transform: scale(1.1);
 }
 
-/* DARK GRADIENT OVERLAY */
 .arr-image::after {
   content: '';
   position: absolute;
@@ -266,7 +263,7 @@ onMounted(async () => {
   flex-direction: column;
   gap: 6px;
 
-  text-align: left; /* 🔥 KLJUČNO */
+  text-align: left;
 
   color: #fff;
 }
@@ -338,9 +335,9 @@ onMounted(async () => {
 
   gap: 80px;
 
-  background: rgba(255, 255, 255, 0.2); /* 🔥 transparent */
-  backdrop-filter: blur(12px); /* 🔥 blur */
-  -webkit-backdrop-filter: blur(12px); /* safari */
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 
   border: 1px solid rgba(112, 85, 25, 0.6);
   border-radius: 50px;
@@ -350,32 +347,29 @@ onMounted(async () => {
 
 /* LEFT */
 .filter-left {
-  flex: 1.5; /* 🔥 više prostora za search */
+  flex: 1.2;
 }
 
 .search {
   width: 100%;
-  padding: 13px 16px; /* veći input */
+  padding: 13px 16px;
   border-radius: 20px;
   border: 1px solid #ccc;
   font-size: 15px;
 }
 
-/* RIGHT */
 .filter-right {
   display: flex;
-  gap: 15px; /* veći razmak */
+  gap: 15px;
   align-items: center;
 }
 
-/* INPUTS */
-.filter-right input,
 .filter-right select {
-  padding: 12px 14px; /* veći elementi */
+  padding: 12px 14px;
   border-radius: 20px;
   border: 1px solid #ccc;
   font-size: 14px;
-  min-width: 130px; /* 🔥 da ne budu mali */
+  min-width: 200px;
 }
 
 .filter-right input:focus,

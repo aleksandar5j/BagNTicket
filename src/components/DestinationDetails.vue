@@ -83,10 +83,6 @@
               <div class="stars">
                 <span v-for="n in acc.acc_stars" :key="n">★</span>
               </div>
-
-              <div class="price" v-for="room in acc.rooms" :key="room.rom_id">
-                from {{ room.rom_price_per_night }} €
-              </div>
             </div>
           </div>
         </div>

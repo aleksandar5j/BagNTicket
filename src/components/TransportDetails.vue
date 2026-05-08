@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import api from '@/api'
 import { useRoute, useRouter } from 'vue-router'
 import { imageUrl } from '@/api/config'
@@ -7,7 +7,15 @@ import { imageUrl } from '@/api/config'
 const route = useRoute()
 const router = useRouter()
 
-const id = Number(route.params.id)
+const tra_type = ref(String(route.params.tra_type))
+
+watch(
+  () => route.params.tra_type,
+  (newType) => {
+    tra_type.value = String(newType)
+    getTransportArr()
+  },
+)
 
 function goToDetails(id: number) {
   router.push({
@@ -42,9 +50,8 @@ const transportArragnements = ref<Arrangement[]>([])
 
 async function getTransportArr() {
   try {
-    const res = await api.getTransportArrangements(id)
+    const res = await api.getTransportArrangements(tra_type.value)
     transportArragnements.value = res.data.data
-    console.log(res.data)
   } catch (error) {
     console.log(error)
   }

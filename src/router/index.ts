@@ -83,7 +83,7 @@ const router = createRouter({
       component: About,
     },
     {
-      path: '/transport-arrangements/:id',
+      path: '/transport-arrangements/:tra_type',
       name: 'transport-arrangements',
       component: TransportDetails,
     },

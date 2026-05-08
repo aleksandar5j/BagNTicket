@@ -4,22 +4,49 @@ import api from '@/api'
 import { imageUrl } from '@/api/config'
 
 import { useRouter } from 'vue-router'
+import { useSessionStore } from '@/stores/sessionUser'
+
+const session = useSessionStore()
 
 const router = useRouter()
+
+const userId = session.user?.usr_id || null
 
 type Destination = {
   des_id: number
   des_name: string
   image: string
+  fav_id?: number | null
 }
 
 const searchDest = ref('')
 
+async function postFav(id: number) {
+  const dest = destinations.value.find((d) => d.des_id === id)
+
+  if (!dest) return
+
+  try {
+    if (dest.fav_id) {
+      await api.removeFavorite(session.user.usr_id, id)
+      dest.fav_id = null
+    } else {
+      await api.postFavorite(session.user.usr_id, id)
+      dest.fav_id = 1
+    }
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 async function filterDest() {
   try {
     const res = await api.filterDestinations(searchDest.value)
-    destinations.value = res.data.data
-    console.log(res.data)
+
+    destinations.value = res.data.data.map((d: any) => ({
+      ...d,
+      fav_id: d.fav_id ?? null, // zaštita
+    }))
   } catch (error) {
     console.log(error)
   }
@@ -31,7 +58,7 @@ async function getDestinations() {
   console.log('POZVANA FUNKCIJA')
 
   try {
-    const res = await api.getDestinations()
+    const res = await api.getDestinations(userId)
     console.log(res)
 
     destinations.value = res.data.data
@@ -51,8 +78,6 @@ const destinationsSection = ref<HTMLElement | null>(null)
 
 onMounted(async () => {
   await getDestinations()
-  await nextTick()
-  await filterDest()
 
   destinationsSection.value?.scrollIntoView({
     behavior: 'smooth',
@@ -88,7 +113,18 @@ onMounted(async () => {
           @click="goToDetails(dest.des_id)"
         >
           <img v-if="dest.image" :src="imageUrl + dest.image" />
+
           <h3 v-else>No image</h3>
+
+          <div class="isFavorite" @click.stop="postFav(dest.des_id)" v-if="session.isLoggedIn">
+            <img
+              :src="
+                dest.fav_id
+                  ? '/src/videos-images/for-all/heart.png'
+                  : '/src/videos-images/for-all/emptyheart.png'
+              "
+            />
+          </div>
 
           <div class="label">
             {{ dest.des_name }}
@@ -254,5 +290,51 @@ onMounted(async () => {
   font-weight: 500;
 
   backdrop-filter: blur(5px);
+}
+
+.isFavorite {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  z-index: 50; /* 🔥 BITNO */
+  border: 2px solid white;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.isFavorite img {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+  transition: 0.25s ease;
+}
+
+.heart-empty {
+  opacity: 0;
+}
+
+.isFavorite:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+  transition: 0.2s ease;
+}
+
+.isFavorite:hover .heart-full {
+  opacity: 0;
+  transform: scale(1.2);
+}
+
+.isFavorite:hover .heart-empty {
+  opacity: 1;
+  transform: scale(1);
+  filter: invert(1);
 }
 </style>
