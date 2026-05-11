@@ -101,7 +101,7 @@
             <span>Available rooms</span>
           </div>
 
-          <div class="hotel-grid">
+          <div class="hotel-grid" v-if="acc.rooms.length">
             <div class="hotel-card" v-for="room in acc.rooms" :key="room.rom_id">
               <!-- LEFT IMAGE -->
               <div class="room-img">
@@ -124,6 +124,12 @@
                 <button class="book-btn">Book now</button>
               </div>
             </div>
+          </div>
+
+          <div v-else>
+            <h1 style="text-align: center; color: gray; margin-bottom: 100px">
+              No available rooms
+            </h1>
           </div>
         </div>
       </section>

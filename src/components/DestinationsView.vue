@@ -102,6 +102,14 @@ onMounted(async () => {
       </div>
     </section>
 
+    <div class="tip" v-if="!session.isLoggedIn">
+      <h2>
+        Sign in to save your favorite destinations, create your personal travel wishlist, and
+        quickly access the places you’d love to visit again.
+      </h2>
+      <img src="/src/videos-images/for-all/heart.png" />
+    </div>
+
     <section ref="destinationsSection" class="destinations" v-if="destinations.length">
       <h2>All Destinations</h2>
 
@@ -336,5 +344,27 @@ onMounted(async () => {
   opacity: 1;
   transform: scale(1);
   filter: invert(1);
+}
+
+.tip {
+  display: flex;
+  max-width: 1300px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  gap: 40px;
+  padding: 15px;
+  background-color: #f7f7f7;
+  border-radius: 20px;
+  margin-bottom: 70px;
+}
+
+.tip img {
+  height: 50px;
+}
+
+.tip h2 {
+  font-size: 15px;
 }
 </style>

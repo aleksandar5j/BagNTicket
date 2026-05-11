@@ -12,6 +12,13 @@ type RegisterData = {
   email: string
 }
 
+type postRev = {
+  usr_id: number
+  arr_id: number
+  rev_rating: number
+  rev_comment: string
+}
+
 type FilterData = {
   arr_title?: string
   from?: string
@@ -93,4 +100,10 @@ export default {
 
   getTransportArrangements: (tra_type: string) =>
     axios.get('/front/transport/details', { params: { tra_type } }),
+
+  getReviews: (arr_id: number) => axios.get('front/reviews', { params: { arr_id } }),
+  postReview: ({ usr_id, arr_id, rev_rating, rev_comment }: postRev) =>
+    axios.post('front/reviews', { usr_id, arr_id, rev_rating, rev_comment }),
+  deleteReview: (rev_id: number, usr_id: number) =>
+    axios.delete('front/reviews', { params: { rev_id, usr_id } }),
 }

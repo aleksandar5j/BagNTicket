@@ -59,14 +59,14 @@ watch(
 <template>
   <div class="page">
     <section class="arrangements">
-      <div class="title-block" v-if="categoryName">
+      <div class="title-block">
         <h2>
           Explore <span>{{ categoryName }}</span>
         </h2>
         <p>Find the best travel deals, hand-picked just for you</p>
       </div>
 
-      <div class="grid">
+      <div class="grid" v-if="arrangements.length">
         <div
           class="card"
           v-for="arr in arrangements"
@@ -76,22 +76,23 @@ watch(
           <img v-if="arr.image" :src="imageUrl + arr.image" />
           <div v-else class="no-img">No image</div>
 
-          <!-- LABEL -->
-          <div class="label">
-            {{ arr.arr_title }}
-          </div>
+          <div class="arr-overlay">
+            <div class="title">
+              <h3>{{ arr.arr_title }}</h3>
+            </div>
 
-          <!-- INFO -->
-          <div class="info">
-            <span>💰 {{ arr.arr_price }}€</span>
-            <span>🗓 {{ arr.arr_duration_days }} days</span>
+            <div class="price">{{ arr.arr_price }} €</div>
+            <span>{{ arr.arr_duration_days }} days</span>
           </div>
 
           <!-- OVERLAY -->
           <div class="overlay">
-            <span>View Details</span>
+            <span>Book now</span>
           </div>
         </div>
+      </div>
+      <div v-else>
+        <h1>No result</h1>
       </div>
     </section>
   </div>
@@ -117,12 +118,12 @@ watch(
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
-  max-width: 1100px;
+  max-width: 1300px;
   margin: 0 auto;
 }
 
 .card {
-  width: 220px;
+  width: 240px;
   height: 320px;
   position: relative;
   border-radius: 15px;
@@ -209,6 +210,17 @@ watch(
   transition: 0.3s ease;
 }
 
+.overlay span {
+  padding: 15px 20px;
+  border-radius: 30px;
+
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  color: #fff;
+}
+
 .card:hover .overlay {
   opacity: 1;
 }
@@ -247,5 +259,40 @@ watch(
   font-size: 16px;
   color: #666;
   margin-bottom: 200px;
+}
+
+.arr-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+
+  padding-bottom: 20px;
+  backdrop-filter: blur(8px);
+
+  padding: 18px;
+
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.5), transparent);
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  text-align: left;
+
+  color: #fff;
+}
+
+.arr-overlay .title h3 {
+  font-size: 16px;
+  font-weight: 600;
+
+  display: inline-block;
+  border-radius: 20px;
+}
+
+.arr-overlay .price {
+  color: #ddba6f;
 }
 </style>

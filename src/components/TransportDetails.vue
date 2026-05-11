@@ -314,7 +314,6 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   gap: 10px;
   margin-bottom: 14px;
 }
@@ -323,6 +322,12 @@ onMounted(() => {
   font-size: 21px;
   color: #111;
   line-height: 1.3;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+
+  overflow: hidden;
 }
 
 .price {
@@ -339,7 +344,7 @@ onMounted(() => {
   margin-bottom: 22px;
 
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

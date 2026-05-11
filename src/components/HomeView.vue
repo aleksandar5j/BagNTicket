@@ -220,11 +220,11 @@ onMounted(() => {
       </div>
     </section>
 
-    <div class="section-divider"></div>
+    <div class="divider-with-text">
+      <span>Popular Destinations</span>
+    </div>
 
     <section class="featured">
-      <h2>Popular Destinations</h2>
-
       <div class="featured-grid">
         <div
           class="card-modern"
@@ -271,13 +271,13 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="section-divider"></div>
+    <div class="divider-with-text">
+      <span>Last minute offers</span>
+    </div>
 
     <section class="deals">
       <div class="deals-box">
         <div class="deals-header">
-          <h2><img src="/src/videos-images/for-all/fire.png" /> Last Minute Offers</h2>
-
           <div class="controls">
             <button @click="scrollLeft">‹</button>
             <button @click="scrollRight">›</button>
@@ -299,7 +299,9 @@ onMounted(() => {
       </div>
     </section>
 
-    <div class="section-divider"></div>
+    <div class="divider-with-text">
+      <span>Travel options</span>
+    </div>
 
     <section class="transport">
       <div class="transport-box">
@@ -826,23 +828,26 @@ onMounted(() => {
   }
 }
 
-.section-divider {
+.divider-with-text {
   display: flex;
   align-items: center;
-  justify-content: center;
-  position: relative;
+  text-align: center;
+  margin: 60px auto;
   max-width: 1300px;
-  margin: auto;
-  margin-top: 50px;
-  margin-bottom: 50px;
 }
 
-.section-divider::before,
-.section-divider::after {
+.divider-with-text::before,
+.divider-with-text::after {
   content: '';
   flex: 1;
   height: 1px;
   background: #ddd;
+}
+
+.divider-with-text span {
+  padding: 0 15px;
+  color: #888;
+  font-size: 30px;
 }
 
 .isFavorite {

@@ -59,7 +59,7 @@
               <img :src="imageUrl + arr.image" />
 
               <div class="arr-hover">
-                <span>View More</span>
+                <span>Book now</span>
               </div>
 
               <div class="arr-overlay">
@@ -288,36 +288,39 @@ function handleInput() {
   );
 }
 
-/* TITLE + PRICE OVERLAY */
 .arr-overlay {
   position: absolute;
-  inset: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   z-index: 2;
+
+  padding-bottom: 20px;
+  backdrop-filter: blur(8px);
+
+  padding: 18px;
+
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.5), transparent);
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 6px;
 
-  padding: 15px;
+  text-align: left;
+
   color: #fff;
 }
 
-/* TITLE (GORE) */
 .arr-overlay .title h3 {
   font-size: 16px;
   font-weight: 600;
 
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-
   display: inline-block;
-  padding: 6px 10px;
   border-radius: 20px;
 }
 
-/* PRICE (DOLE) */
 .arr-overlay .price {
-  align-self: flex-end;
+  align-self: flex-start;
 
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(6px);
