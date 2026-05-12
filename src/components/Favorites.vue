@@ -78,8 +78,8 @@ onMounted(() => {
             <img :src="imageUrl + fav.image" />
 
             <div class="isFavorite" @click.stop="removeFav(fav.des_id)">
-              <img class="heart-full" src="/src/videos-images/for-all/heart.png" />
-              <img class="heart-empty" src="/src/videos-images/for-all/emptyheart.png" />
+              <img class="heart-full" src="/public/images/heart.png" />
+              <img class="heart-empty" src="/public/images/emptyheart.png" />
             </div>
 
             <div class="card-overlay">

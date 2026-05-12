@@ -49,7 +49,7 @@
 
       <div class="transport-card" v-if="arrangement.tra_type || arrangement.tra_departure_location">
         <div class="transport-header">
-          <img src="/src/videos-images/for-all/earth.png" />
+          <img src="/public/images/earth.png" />
           <h2>Transport Details</h2>
         </div>
 
@@ -85,7 +85,7 @@
 
       <!-- EMPTY STATE -->
       <div v-else class="transport-empty">
-        <img src="/src/videos-images/for-all/airplane.png" />
+        <img src="/public/images/airplane.png" />
         <h3>No transport available for this trip</h3>
         <p>Transportation details will be added soon or depend on selected package.</p>
       </div>
@@ -103,11 +103,7 @@
                 <img
                   v-for="n in 5"
                   :key="n"
-                  :src="
-                    n <= acc.acc_stars
-                      ? '/src/videos-images/for-all/star.png'
-                      : '/src/videos-images/for-all/emptystar.png'
-                  "
+                  :src="n <= acc.acc_stars ? '/images/star.png' : '/images/emptystar.png'"
                   class="star-iconn"
                 />
               </div>
@@ -163,12 +159,8 @@
                 <img
                   v-for="n in 5"
                   :key="n"
-                  :src="
-                    n <= acc.acc_stars
-                      ? '/src/videos-images/for-all/star.png'
-                      : '/src/videos-images/for-all/emptystar.png'
-                  "
-                  class="star-icon"
+                  :src="n <= acc.acc_stars ? '/images/star.png' : '/images/emptystar.png'"
+                  class="star-iconn"
                 />
               </div>
             </div>
@@ -222,11 +214,7 @@
           <img
             v-for="n in 5"
             :key="n"
-            :src="
-              n <= rev_rating
-                ? '/src/videos-images/for-all/star.png'
-                : '/src/videos-images/for-all/emptystar.png'
-            "
+            :src="n <= rev_rating ? '/images/star.png' : '/images/emptystar.png'"
             class="star-select"
             @click="rev_rating = n"
           />
@@ -241,7 +229,7 @@
       </div>
 
       <div v-else class="login-review-box">
-        <img src="/src/videos-images/for-all/userforlogin.png" class="login-review-icon" />
+        <img src="/public/images/userforlogin.png" class="login-review-icon" />
 
         <h3>Want to share your experience?</h3>
 
@@ -260,7 +248,7 @@
       <div class="review-card" v-for="rev in reviews" :key="rev.rev_id">
         <div class="review-top">
           <div class="user-info">
-            <img src="/src/videos-images/for-all/userforlogin.png" class="user-img" />
+            <img src="/public/images/userforlogin.png" class="user-img" />
 
             <div>
               <h4>{{ rev.usr_fullname }}</h4>
@@ -273,11 +261,7 @@
               <img
                 v-for="n in 5"
                 :key="n"
-                :src="
-                  n <= rev.rev_rating
-                    ? '/src/videos-images/for-all/star.png'
-                    : '/src/videos-images/for-all/emptystar.png'
-                "
+                :src="n <= rev.rev_rating ? '/images/star.png' : '/images/emptystar.png'"
                 class="star-icon"
               />
             </div>
@@ -285,11 +269,11 @@
             <!-- ACTION MENU -->
             <div class="actions" v-if="session.user?.usr_id === rev.usr_id">
               <button @click.stop="editReview(rev)">
-                <img src="/src/videos-images/for-all/edit.png" />
+                <img src="/public/images/edit.png" />
               </button>
 
               <button @click.stop="deleteReview(rev.rev_id)">
-                <img src="/src/videos-images/for-all/bin.png" />
+                <img src="/public/images/bin.png" />
               </button>
             </div>
           </div>
@@ -318,9 +302,9 @@
 
   <transition name="toast">
     <div v-if="showToast" :class="['toast', toastType]">
-      <img v-if="toastType === 'success'" src="/src/videos-images/for-all/check.png" />
+      <img v-if="toastType === 'success'" src="/public/images/check.png" />
 
-      <img v-else src="/src/videos-images/for-all/warning.png" />
+      <img v-else src="/public/images/warning.png" />
 
       <span>{{ toastMessage }}</span>
     </div>

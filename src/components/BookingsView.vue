@@ -20,23 +20,23 @@
             </div>
 
             <p class="location">
-              <img src="/src/videos-images/for-all/location.png" />
+              <img src="/public/images/location.png" />
               {{ bok.des_name }}, {{ bok.des_country }}
             </p>
 
             <div class="meta-row">
               <div class="meta-item">
-                <img src="/src/videos-images/for-all/userforlogin.png" />
+                <img src="/public/images/userforlogin.png" />
                 <span>{{ bok.bok_num_people }} people</span>
               </div>
 
               <div class="meta-item">
-                <img src="/src/videos-images/for-all/calendar.png" />
+                <img src="/public/images/calendar.png" />
                 <span>{{ bok.bok_booking_date }}</span>
               </div>
 
               <div class="meta-item">
-                <img src="/src/videos-images/for-all/money.png" />
+                <img src="/public/images/money.png" />
                 <span>{{ bok.bok_total_price }}€</span>
               </div>
             </div>

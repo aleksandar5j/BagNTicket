@@ -42,7 +42,7 @@
 
           <button class="filter-btn" @click="searchArrFun">Search</button>
           <button class="filter-resetbtn" @click="resetFilters">
-            <img src="/src/videos-images/for-all/reset.png" />
+            <img src="/public/images/reset.png" />
           </button>
         </div>
       </div>

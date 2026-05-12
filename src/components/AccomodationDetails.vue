@@ -20,11 +20,7 @@
               <img
                 v-for="n in 5"
                 :key="n"
-                :src="
-                  n <= acc.acc_stars
-                    ? '/src/videos-images/for-all/star.png'
-                    : '/src/videos-images/for-all/emptystar.png'
-                "
+                :src="n <= acc.acc_stars ? '/images/star.png' : '/images/emptystar.png'"
                 class="star-icon"
               />
             </div>
@@ -117,9 +113,7 @@
               </div>
 
               <!-- RIGHT BUTTON -->
-              <div class="room-action">
-                <button class="book-btn">Book now</button>
-              </div>
+              <div class="room-action"></div>
             </div>
           </div>
 
@@ -145,9 +139,9 @@
 
   <transition name="toast">
     <div v-if="showToast" :class="['toast', toastType]">
-      <img v-if="toastType === 'success'" src="/src/videos-images/for-all/check.png" />
+      <img v-if="toastType === 'success'" src="/public/images/check.png" />
 
-      <img v-else src="/src/videos-images/for-all/warning.png" />
+      <img v-else src="/public/images/warning.png" />
 
       <span>{{ toastMessage }}</span>
     </div>

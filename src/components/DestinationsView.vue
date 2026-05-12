@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted } from 'vue'
 import api from '@/api'
 import { imageUrl } from '@/api/config'
 
@@ -43,6 +43,7 @@ async function filterDest() {
   try {
     const res = await api.filterDestinations(searchDest.value)
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     destinations.value = res.data.data.map((d: any) => ({
       ...d,
       fav_id: d.fav_id ?? null, // zaštita
@@ -107,7 +108,7 @@ onMounted(async () => {
         Sign in to save your favorite destinations, create your personal travel wishlist, and
         quickly access the places you’d love to visit again.
       </h2>
-      <img src="/src/videos-images/for-all/heart.png" />
+      <img src="/public/images/heart.png" />
     </div>
 
     <section ref="destinationsSection" class="destinations" v-if="destinations.length">
@@ -125,13 +126,7 @@ onMounted(async () => {
           <h3 v-else>No image</h3>
 
           <div class="isFavorite" @click.stop="postFav(dest.des_id)" v-if="session.isLoggedIn">
-            <img
-              :src="
-                dest.fav_id
-                  ? '/src/videos-images/for-all/heart.png'
-                  : '/src/videos-images/for-all/emptyheart.png'
-              "
-            />
+            <img :src="dest.fav_id ? '/images/heart.png' : '/images/emptyheart.png'" />
           </div>
 
           <div class="label">

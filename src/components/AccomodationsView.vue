@@ -37,7 +37,7 @@
 
           <button class="filter-btn" @click="filterHotels">Search</button>
           <button class="filter-resetbtn" @click="resetFilters">
-            <img src="/src/videos-images/for-all/reset.png" />
+            <img src="/public/images/reset.png" />
           </button>
         </div>
       </div>
@@ -66,11 +66,7 @@
                   <img
                     v-for="n in 5"
                     :key="n"
-                    :src="
-                      n <= acc.acc_stars
-                        ? '/src/videos-images/for-all/star.png'
-                        : '/src/videos-images/for-all/emptystar.png'
-                    "
+                    :src="n <= acc.acc_stars ? '/images/star.png' : '/images/emptystar.png'"
                     class="star-icon"
                   />
                 </div>

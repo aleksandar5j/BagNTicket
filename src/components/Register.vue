@@ -7,28 +7,28 @@
 
       <div class="form-group">
         <div class="input-wrap">
-          <span><img src="/src/videos-images/for-all/info.png" /></span>
+          <span><img src="/public/images/info.png" /></span>
           <input type="text" v-model="fullname" placeholder="Full name" required />
         </div>
       </div>
 
       <div class="form-group">
         <div class="input-wrap">
-          <span><img src="/src/videos-images/for-all/userforlogin.png" /></span>
+          <span><img src="/public/images/userforlogin.png" /></span>
           <input type="text" v-model="username" placeholder="Username" required />
         </div>
       </div>
 
       <div class="form-group">
         <div class="input-wrap">
-          <span><img src="/src/videos-images/for-all/email.png" /></span>
+          <span><img src="/public/images/email.png" /></span>
           <input type="email" v-model="email" placeholder="Email" required />
         </div>
       </div>
 
       <div class="form-group">
         <div class="input-wrap">
-          <span><img src="/src/videos-images/for-all/padlock.png" /></span>
+          <span><img src="/public/images/padlock.png" /></span>
           <input
             :type="showPass ? 'text' : 'password'"
             v-model="password"
@@ -41,7 +41,7 @@
 
       <div class="form-group">
         <div class="input-wrap">
-          <span><img src="/src/videos-images/for-all/padlock.png" /></span>
+          <span><img src="/public/images/padlock.png" /></span>
           <input
             :type="showPass ? 'text' : 'password'"
             v-model="password2"
@@ -123,7 +123,7 @@ async function userRegister() {
 .bg {
   position: absolute;
   inset: 0;
-  background: url('/src/videos-images/for-all/register-bg.jpg') center/cover no-repeat;
+  background: url('/public/images/register-bg.jpg') center/cover no-repeat;
   transform: scale(1.1);
   z-index: -3;
 }

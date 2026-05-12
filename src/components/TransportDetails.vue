@@ -112,12 +112,12 @@ onMounted(() => {
             <div class="info-grid">
               <div class="info-box">
                 <span>Departure</span>
-                <strong>{{ tra.tra_departure_location }}</strong>
+                <strong class="limit">{{ tra.tra_departure_location }}</strong>
               </div>
 
               <div class="info-box">
                 <span>Arrival</span>
-                <strong>{{ tra.tra_arrival_location }}</strong>
+                <strong class="limit">{{ tra.tra_arrival_location }}</strong>
               </div>
 
               <div class="info-box">
@@ -374,6 +374,13 @@ onMounted(() => {
 .info-box strong {
   color: #111;
   font-size: 13px;
+}
+
+.info-box .limit {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
 }
 
 /* BUTTON */

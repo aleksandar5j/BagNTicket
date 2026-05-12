@@ -8,7 +8,7 @@
       <div class="form-group">
         <div class="input-wrap">
           <span>
-            <img src="/src/videos-images/for-all/userforlogin.png" />
+            <img src="/public/images/userforlogin.png" />
           </span>
           <input type="text" v-model="username" placeholder="Username" required />
         </div>
@@ -17,7 +17,7 @@
       <div class="form-group">
         <div class="input-wrap">
           <span>
-            <img src="/src/videos-images/for-all/padlock.png" />
+            <img src="/public/images/padlock.png" />
           </span>
 
           <input

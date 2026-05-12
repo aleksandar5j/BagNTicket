@@ -74,19 +74,19 @@ async function getTransports() {
 function getTransportImage(type: string) {
   switch (type.toLowerCase()) {
     case 'plane':
-      return '/src/videos-images/for-all/airplane.png'
+      return '/images/airplane.png'
 
     case 'bus':
-      return '/src/videos-images/for-all/bus.png'
+      return '/images/bus.png'
 
     case 'train':
-      return '/src/videos-images/for-all/train.png'
+      return '/images/train.png'
 
     case 'ship':
-      return '/src/videos-images/for-all/ship.png'
+      return '/images/ship.png'
 
     default:
-      return '/src/videos-images/for-all/transport.png'
+      return '/images/transport.png'
   }
 }
 
@@ -234,13 +234,7 @@ onMounted(() => {
           @click="goToDetails(dest.des_id)"
         >
           <div class="isFavorite" @click.stop="postFav(dest.des_id)" v-if="session.isLoggedIn">
-            <img
-              :src="
-                dest.fav_id
-                  ? '/src/videos-images/for-all/heart.png'
-                  : '/src/videos-images/for-all/emptyheart.png'
-              "
-            />
+            <img :src="dest.fav_id ? '/images/heart.png' : '/images/emptyheart.png'" />
           </div>
           <img v-if="dest.image" :src="imageUrl + dest.image" />
           <div v-else class="no-img">No image</div>
@@ -267,7 +261,7 @@ onMounted(() => {
         <button @click="$router.push('/destinations')">View Destinations</button>
       </div>
       <div class="second">
-        <img src="/src/videos-images/for-all/globe.png" />
+        <img src="/public/images/globe.png" />
       </div>
     </div>
 
@@ -305,9 +299,7 @@ onMounted(() => {
 
     <section class="transport">
       <div class="transport-box">
-        <h2>
-          What's Your Favorite Way to Travel? <img src="/src/videos-images/for-all/earth.png" />
-        </h2>
+        <h2>What's Your Favorite Way to Travel? <img src="/public/images/earth.png" /></h2>
         <p class="subtitle">
           Choose your preferred transport and discover journeys tailored just for you.
         </p>
