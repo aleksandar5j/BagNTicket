@@ -113,7 +113,16 @@ export default {
     axios.post('front/reviews', { usr_id, arr_id, rev_rating, rev_comment }),
   deleteReview: (rev_id: number, usr_id: number) =>
     axios.delete('front/reviews', { params: { rev_id, usr_id } }),
+  updateReview: (rev_id: number, rev_rating: number, rev_comment: string) =>
+    axios.put('front/reviews', {
+      rev_id,
+      rev_rating,
+      rev_comment,
+    }),
 
   postBooking: ({ usr_id, arr_id, bok_num_people, bok_total_price }: Booking) =>
     axios.post('front/bookings', { usr_id, arr_id, bok_num_people, bok_total_price }),
+  getBookings: (usr_id: number) => axios.get('front/bookings', { params: { usr_id } }),
+  deleteBooking: (usr_id: number, bok_id: number) =>
+    axios.delete('front/bookings', { params: { usr_id, bok_id } }),
 }

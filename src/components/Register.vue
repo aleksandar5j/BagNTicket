@@ -2,18 +2,16 @@
 <template>
   <div class="login-page">
     <form class="login-card" @submit.prevent="userRegister">
-      <h1>Register</h1>
-      <p class="subtitle">Create your account</p>
+      <h1>Create account</h1>
+      <p class="subtitle">Find perfect stay for you!</p>
 
-      <!-- Puno ime -->
       <div class="form-group">
         <div class="input-wrap">
           <span><img src="/src/videos-images/for-all/info.png" /></span>
-          <input type="text" v-model="fullname" placeholder="Fullname" required />
+          <input type="text" v-model="fullname" placeholder="Full name" required />
         </div>
       </div>
 
-      <!-- Korisničko ime -->
       <div class="form-group">
         <div class="input-wrap">
           <span><img src="/src/videos-images/for-all/userforlogin.png" /></span>
@@ -21,7 +19,6 @@
         </div>
       </div>
 
-      <!-- Email -->
       <div class="form-group">
         <div class="input-wrap">
           <span><img src="/src/videos-images/for-all/email.png" /></span>
@@ -29,7 +26,6 @@
         </div>
       </div>
 
-      <!-- Password -->
       <div class="form-group">
         <div class="input-wrap">
           <span><img src="/src/videos-images/for-all/padlock.png" /></span>
@@ -43,24 +39,23 @@
         </div>
       </div>
 
-      <!-- Confirm Password -->
       <div class="form-group">
         <div class="input-wrap">
           <span><img src="/src/videos-images/for-all/padlock.png" /></span>
           <input
             :type="showPass ? 'text' : 'password'"
             v-model="password2"
-            placeholder="Retype password"
+            placeholder="Repeat password"
             required
           />
           <button type="button" class="show" @click="showPass = !showPass">👁</button>
         </div>
       </div>
 
-      <button type="submit" class="register-btn">Register</button>
+      <button type="submit" class="register-btn">Create account</button>
 
       <div class="not-log">
-        <p>You already have account?</p>
+        <p>Already have an account?</p>
         <button class="login-btn" @click="backToLogin">Login</button>
       </div>
 
@@ -116,82 +111,82 @@ async function userRegister() {
 <style scoped>
 .login-page {
   position: relative;
-  height: 100vh;
+  height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: Arial, Helvetica, sans-serif;
   overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-/* VIDEO */
-.bg-video {
+/* BACKGROUND */
+.bg {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  inset: 0;
+  background: url('/src/videos-images/for-all/register-bg.jpg') center/cover no-repeat;
+  transform: scale(1.1);
+  z-index: -3;
+}
+
+/* DARK OVERLAY */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.85));
   z-index: -2;
 }
 
-/* LOGIN CARD */
+/* CARD */
 .login-card {
   width: 380px;
-  padding: 40px;
-  border-radius: 18px;
-  backdrop-filter: blur(18px);
+  padding: 35px;
+  border-radius: 20px;
+
   background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
+
   color: white;
-  z-index: 1; /* iznad videa i overlay-a */
 }
 
+/* TITLE */
 .login-card h1 {
   text-align: center;
+  font-size: 24px;
   margin: 0;
 }
 
 .subtitle {
   text-align: center;
   opacity: 0.7;
-  font-size: 14px;
+  font-size: 13px;
+  margin-bottom: 5px;
 }
 
-/* INPUTS */
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 14px;
-}
-
+/* INPUT */
 .input-wrap {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: white;
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
   padding: 0 10px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  transition: all 0.2s;
+  transition: 0.2s;
 }
 
 .input-wrap:focus-within {
-  border: 1px solid #4facfe;
-  box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.2);
-}
-
-.input-wrap span {
-  margin: 0;
-  margin-top: 7px;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .input-wrap span img {
-  height: 16px;
-  opacity: 0.9;
+  height: 18px;
+  opacity: 0.8;
 }
 
 .input-wrap input {
@@ -199,159 +194,86 @@ async function userRegister() {
   border: none;
   outline: none;
   padding: 12px;
-  color: #222;
   font-size: 14px;
   background: transparent;
 }
 
-.input-wrap input::placeholder {
-  color: #777;
-}
-
-/* SHOW PASSWORD */
-
+/* PASSWORD */
 .show {
-  background: none;
   border: none;
+  background: transparent;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
 }
 
-/* LOGIN BUTTON */
-
-.login-btn {
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.login-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-}
-
-/* DIVIDER */
-
-.divider {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  opacity: 0.6;
-  font-size: 13px;
-}
-
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: white;
-}
-
-.error {
-  background: rgba(255, 0, 0, 0.15);
-  padding: 10px;
-  border-radius: 8px;
-  color: #ffb3b3;
-  text-align: center;
-  font-size: 13px;
-}
-
-.success {
-  background: rgba(0, 255, 150, 0.15);
-  padding: 10px;
-  border-radius: 8px;
-  color: #8affc1;
-  text-align: center;
-  font-size: 13px;
-}
-
-.login-btn {
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, #ffffff, #ffffff);
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.login-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-}
-
+/* REGISTER BUTTON */
 .register-btn {
   padding: 12px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: none;
-  background: linear-gradient(135deg, #4facfe, #0083fe);
+
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
   color: white;
-  font-weight: bold;
+  font-weight: 600;
+
   cursor: pointer;
-  transition: all 0.2s;
+  transition: 0.2s;
 }
 
 .register-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
+/* SWITCH LOGIN */
 .not-log {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  opacity: 0.9;
 }
 
-html,
-body {
-  background: var(--bg-main);
-  margin: 0;
-  padding: 0;
+.not-log p {
+  color: black;
 }
 
+.login-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+
+  background: rgba(0, 0, 0, 0.35);
+  color: white;
+}
+
+.login-btn:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* ERROR / SUCCESS */
+.error {
+  background: rgba(255, 0, 0, 0.15);
+  padding: 10px;
+  border-radius: 10px;
+  color: #ffb3b3;
+  text-align: center;
+}
+
+.success {
+  background: rgba(0, 255, 150, 0, 0.15);
+  padding: 10px;
+  border-radius: 10px;
+  color: #8affc1;
+  text-align: center;
+}
+
+/* MOBILE */
 @media (max-width: 768px) {
-  .login-page {
-    padding: 15px; /* mali razmak oko forme */
-  }
-
   .login-card {
-    width: 100%; /* koristi skoro ceo ekran */
-    max-width: 400px; /* ali ne širi previše */
-    padding: 25px 20px; /* smanjen padding za mobilne ekrane */
-    border-radius: 15px; /* malo manja za mobilne */
-  }
-
-  .login-card h1 {
-    font-size: 24px; /* manja naslovna font veličina */
-  }
-
-  .subtitle {
-    font-size: 12px; /* manja za mobilni */
-  }
-
-  .input-wrap input {
-    font-size: 13px; /* prilagodjeno mobilnom */
-    padding: 10px;
-  }
-
-  .login-btn,
-  .register-btn {
-    font-size: 14px;
-    padding: 10px;
-  }
-
-  .not-log {
-    flex-direction: column;
-    flex-direction: column; /* dugmad jedan ispod drugog */
-    gap: 10px;
-    text-align: center;
+    width: 92%;
+    padding: 25px;
   }
 }
 </style>

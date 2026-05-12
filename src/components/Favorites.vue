@@ -247,4 +247,102 @@ onMounted(() => {
   transform: scale(1);
   filter: invert(1);
 }
+
+@media (max-width: 900px) {
+  .details-page {
+    padding-top: 140px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .container {
+    width: 100%;
+  }
+
+  /* TOP TEXT */
+  .top-text {
+    margin-bottom: 60px;
+    padding: 0 10px;
+  }
+
+  .top-text h1 {
+    font-size: 24px;
+  }
+
+  .top-text p {
+    font-size: 13px;
+    max-width: 100%;
+  }
+
+  /* GRID → MOBILE */
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* CARD */
+  .dest-card {
+    border-radius: 14px;
+  }
+
+  .card-image {
+    height: 180px;
+  }
+
+  /* TEXT OVERLAY */
+  .card-overlay {
+    padding: 10px;
+  }
+
+  .card-overlay h3 {
+    font-size: 15px;
+  }
+
+  .card-overlay p {
+    font-size: 12px;
+  }
+
+  /* HOVER → DISABLE (MOBILE FIX) */
+  .dest-card:hover {
+    transform: none;
+  }
+
+  .card-overlay {
+    opacity: 1; /* always visible on mobile */
+  }
+
+  /* FAVORITE BUTTON */
+  .isFavorite {
+    width: 34px;
+    height: 34px;
+    top: 8px;
+    right: 8px;
+  }
+
+  .isFavorite img {
+    width: 55%;
+    height: 55%;
+  }
+
+  /* TAP EFFECT INSTEAD OF HOVER */
+  .isFavorite:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .isFavorite:active {
+    transform: scale(0.9);
+  }
+}
+
+/* SMALL PHONES */
+@media (max-width: 500px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-image {
+    height: 220px;
+  }
+}
 </style>

@@ -463,4 +463,128 @@ function handleInput() {
   border-radius: 20px;
   filter: invert(1);
 }
+
+@media (max-width: 1024px) {
+  .arr-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .filterSection {
+    flex-direction: column;
+    height: auto;
+    gap: 15px;
+    padding: 18px;
+    border-radius: 25px;
+  }
+
+  .filter-left {
+    width: 100%;
+  }
+
+  .filter-right {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .filter-right input,
+  .filter-right select {
+    flex: 1;
+    min-width: 45%;
+  }
+
+  .filter-btn,
+  .filter-resetbtn {
+    flex: 1;
+    min-width: 45%;
+  }
+}
+
+@media (max-width: 768px) {
+  .details-page {
+    padding-top: 160px;
+  }
+
+  .container h1 {
+    font-size: 22px;
+  }
+
+  .container p {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+
+  .arr-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .arr-card {
+    height: 240px;
+  }
+
+  .arr-overlay .title h3 {
+    font-size: 14px;
+  }
+
+  .arr-overlay .price {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
+
+  .filterSection {
+    padding: 15px;
+    border-radius: 20px;
+  }
+
+  .search {
+    padding: 11px 14px;
+    font-size: 14px;
+  }
+
+  .filter-right {
+    gap: 10px;
+  }
+
+  .filter-right input,
+  .filter-right select {
+    min-width: 100%;
+  }
+
+  .filter-btn,
+  .filter-resetbtn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .details-page {
+    padding-top: 120px;
+  }
+
+  .container h1 {
+    font-size: 18px;
+  }
+
+  .container p {
+    font-size: 13px;
+  }
+
+  .arr-card {
+    height: 210px;
+  }
+
+  .arr-overlay {
+    padding: 12px;
+  }
+
+  .filterSection {
+    gap: 10px;
+  }
+
+  .filter-right {
+    flex-direction: column;
+  }
+}
 </style>

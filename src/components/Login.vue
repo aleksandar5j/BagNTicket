@@ -1,30 +1,32 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="login-page">
-    <!-- POLUPROZIRNI OVERLAY -->
-    <div class="overlay"></div>
-
-    <!-- LOGIN FORMA -->
     <form class="login-card" @submit.prevent="userLogin">
-      <h1 style="font-weight: bold">Welcome back</h1>
+      <h1>Welcome back</h1>
       <p class="subtitle">Login to your agendly</p>
 
       <div class="form-group">
         <div class="input-wrap">
-          <span><img src="/src/videos-images/for-all/userforlogin.png" /></span>
+          <span>
+            <img src="/src/videos-images/for-all/userforlogin.png" />
+          </span>
           <input type="text" v-model="username" placeholder="Username" required />
         </div>
       </div>
 
       <div class="form-group">
         <div class="input-wrap">
-          <span><img src="/src/videos-images/for-all/padlock.png" /></span>
+          <span>
+            <img src="/src/videos-images/for-all/padlock.png" />
+          </span>
+
           <input
             :type="showPass ? 'text' : 'password'"
             v-model="password"
             placeholder="Password"
             required
           />
+
           <button type="button" class="show" @click="showPass = !showPass">👁</button>
         </div>
       </div>
@@ -32,7 +34,7 @@
       <button type="submit" class="login-btn">Login</button>
 
       <div class="not-reg">
-        <p>You dont have account yet?</p>
+        <p>You don't have an account?</p>
         <button class="register-btn" @click="backToRegister">Register</button>
       </div>
 
@@ -58,7 +60,7 @@ const errorMsg = ref('')
 const successMsg = ref('')
 
 function backToRegister() {
-  router.push('register')
+  router.push('/register')
 }
 
 const userLogin = async () => {
@@ -70,6 +72,8 @@ const userLogin = async () => {
       username: username.value,
       password: password.value,
     })
+
+    successMsg.value = 'Login successful!'
     router.push('/')
   } catch (err) {
     errorMsg.value = 'Wrong username or password'
@@ -79,9 +83,10 @@ const userLogin = async () => {
 </script>
 
 <style scoped>
+/* PAGE */
 .login-page {
   position: relative;
-  height: 100vh;
+  height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,28 +94,30 @@ const userLogin = async () => {
   overflow: hidden;
 }
 
-/* VIDEO */
-.bg-video {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -2;
-}
-
-/* LOGIN CARD */
+/* CARD */
 .login-card {
-  width: 380px;
+  width: 400px;
   padding: 40px;
-  border-radius: 18px;
-  backdrop-filter: blur(18px);
+  border-radius: 20px;
+
   background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(22px);
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+
   display: flex;
   flex-direction: column;
   gap: 16px;
+
   color: white;
-  z-index: 1; /* iznad videa i overlay-a */
+  z-index: 2;
+  transition: 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-3px);
 }
 
 .login-card h1 {
@@ -125,38 +132,27 @@ const userLogin = async () => {
 }
 
 /* INPUTS */
-
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: 14px;
 }
 
 .input-wrap {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: white;
-  border-radius: 10px;
-  padding: 0 10px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 0 12px;
+  transition: 0.2s;
 }
 
 .input-wrap:focus-within {
-  border: 1px solid #4facfe;
-  box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.2);
-}
-
-.input-wrap span {
-  margin: 0;
-  margin-top: 7px;
+  box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.4);
+  transform: scale(1.02);
 }
 
 .input-wrap span img {
   height: 16px;
-  opacity: 0.9;
 }
 
 .input-wrap input {
@@ -164,17 +160,11 @@ const userLogin = async () => {
   border: none;
   outline: none;
   padding: 12px;
-  color: #222;
-  font-size: 14px;
   background: transparent;
+  color: #222;
 }
 
-.input-wrap input::placeholder {
-  color: #777;
-}
-
-/* SHOW PASSWORD */
-
+/* PASSWORD BUTTON */
 .show {
   background: none;
   border: none;
@@ -182,137 +172,64 @@ const userLogin = async () => {
   font-size: 16px;
 }
 
-/* LOGIN BUTTON */
-
+/* BUTTON */
 .login-btn {
   padding: 12px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: none;
-  background: linear-gradient(135deg, #4facfe, #0083fe);
+
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
   color: white;
   font-weight: bold;
+
   cursor: pointer;
-  transition: all 0.2s;
+  transition: 0.3s;
 }
 
 .login-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
-/* DIVIDER */
-
-.divider {
+/* REGISTER */
+.not-reg {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
-  opacity: 0.6;
-  font-size: 13px;
-}
-
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: white;
-}
-
-.error {
-  background: rgba(255, 0, 0, 0.15);
-  padding: 10px;
-  border-radius: 8px;
-  color: #ffb3b3;
-  text-align: center;
-  font-size: 13px;
-}
-
-.success {
-  background: rgba(0, 255, 150, 0.15);
-  padding: 10px;
-  border-radius: 8px;
-  color: #8affc1;
-  text-align: center;
-  font-size: 13px;
 }
 
 .register-btn {
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 10px;
   border: none;
-  background: linear-gradient(135deg, #ffffff, #ffffff);
+  background: white;
   color: black;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s;
 }
 
-.register-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+/* MESSAGES */
+.error {
+  background: rgba(255, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 10px;
+  color: #ffb3b3;
+  text-align: center;
 }
 
-.not-reg {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.success {
+  background: rgba(0, 255, 150, 0.2);
+  padding: 10px;
+  border-radius: 10px;
+  color: #8affc1;
+  text-align: center;
 }
 
-html,
-body {
-  background: var(--bg-main);
-  margin: 0;
-  padding: 0;
-}
-
+/* MOBILE */
 @media (max-width: 768px) {
   .login-card {
-    width: 90% !important; /* zauzima skoro ceo ekran */
-    padding: 25px 15px !important;
-    border-radius: 15px;
-    gap: 12px;
-    margin: 20px;
-  }
-
-  .login-card h1 {
-    font-size: 20px;
-  }
-
-  .subtitle {
-    font-size: 12px;
-  }
-
-  .form-group {
-    gap: 4px;
-  }
-
-  .input-wrap {
-    padding: 0 8px;
-  }
-
-  .input-wrap input {
-    padding: 10px;
-    font-size: 13px;
-  }
-
-  .login-btn {
-    padding: 10px;
-    font-size: 14px;
-  }
-
-  .not-reg {
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .register-btn {
-    padding: 8px 16px;
-    font-size: 13px;
-  }
-
-  .bg-video {
-    object-fit: cover;
+    width: 90%;
+    padding: 25px;
   }
 }
 </style>

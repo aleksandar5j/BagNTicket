@@ -39,7 +39,7 @@
 
           <button class="hotel-btn" @click="scroolTo()">Choose other hotel</button>
 
-          <button class="book-btn" @click="showBooking = true">Book now</button>
+          <button class="book-btn" @click="openBooking">Book now</button>
         </div>
       </div>
 
@@ -47,26 +47,47 @@
         <span>Transport details</span>
       </div>
 
-      <div class="transport-details">
-        <p v-if="arrangement.tra_type">
-          You are travelling by <strong>{{ arrangement.tra_type }}</strong>
-        </p>
-        <p v-if="arrangement.tra_departure_location && arrangement.tra_departure_time">
-          Departure:
-          <strong>{{ arrangement.tra_departure_location }}</strong>
-          at <strong>{{ arrangement.tra_departure_time }}</strong>
-        </p>
-
-        <p v-if="arrangement.tra_arrival_location && arrangement.tra_arrival_time">
-          Arrival:
-          <strong>{{ arrangement.tra_arrival_location }}</strong>
-          at <strong>{{ arrangement.tra_arrival_time }}</strong>
-        </p>
-        <div v-else>
-          <h1 style="text-align: center; color: #888; padding-bottom: 100px">
-            Currently no transport for this trip!
-          </h1>
+      <div class="transport-card" v-if="arrangement.tra_type || arrangement.tra_departure_location">
+        <div class="transport-header">
+          <img src="/src/videos-images/for-all/earth.png" />
+          <h2>Transport Details</h2>
         </div>
+
+        <div class="transport-body">
+          <div class="transport-item">
+            <span class="label">Travel method</span>
+            <span class="value">
+              {{ arrangement.tra_type }}
+            </span>
+          </div>
+
+          <div
+            class="transport-item"
+            v-if="arrangement.tra_departure_location && arrangement.tra_departure_time"
+          >
+            <span class="label">Departure</span>
+            <span class="value">
+              {{ arrangement.tra_departure_location }} • {{ arrangement.tra_departure_time }}
+            </span>
+          </div>
+
+          <div
+            class="transport-item"
+            v-if="arrangement.tra_arrival_location && arrangement.tra_arrival_time"
+          >
+            <span class="label">Arrival</span>
+            <span class="value">
+              {{ arrangement.tra_arrival_location }} • {{ arrangement.tra_arrival_time }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div v-else class="transport-empty">
+        <img src="/src/videos-images/for-all/airplane.png" />
+        <h3>No transport available for this trip</h3>
+        <p>Transportation details will be added soon or depend on selected package.</p>
       </div>
 
       <div class="divider-with-text">
@@ -313,24 +334,28 @@
       <!-- HEADER -->
       <div class="booking-header">
         <h2>Complete your reservation</h2>
-        <p>You're one step away from your next unforgettable adventure ✈️</p>
+        <p>You're one step away from your next unforgettable adventure</p>
       </div>
 
       <!-- FORM -->
       <div class="booking-form">
-        <div class="input-group">
+        <div class="input-group" v-if="!session.isLoggedIn">
           <label>Full name</label>
-          <input type="text" placeholder="Enter your full name" />
+          <input type="text" placeholder="Enter your full name" v-model="fullname" />
         </div>
 
-        <div class="input-group">
+        <div class="input-group" v-if="!session.isLoggedIn">
           <label>Email address</label>
-          <input type="email" placeholder="Enter your email" />
+          <input type="email" placeholder="Enter your email" v-model="email" />
         </div>
 
-        <div class="input-group">
+        <div class="input-group" v-if="!session.isLoggedIn">
           <label>Phone number</label>
-          <input type="text" placeholder="Enter your phone number" />
+          <input type="number" placeholder="Enter your phone number" v-model="phonenum" />
+        </div>
+
+        <div v-else class="logged">
+          <h1>You are a logged person, you dont have to put your pesonal informations...</h1>
         </div>
 
         <div class="input-group">
@@ -339,7 +364,7 @@
           <select v-model="peopleCount">
             <option disabled value="">Select travelers</option>
 
-            <option v-for="n in arrangement.arr_capacity" :key="n" :value="n">
+            <option v-for="n in arrangement?.arr_capacity" :key="n" :value="n">
               {{ n }} Traveler{{ n > 1 ? 's' : '' }}
             </option>
           </select>
@@ -357,17 +382,34 @@
         <div class="booking-summary">
           <div>
             <span>Price per person</span>
-            <strong>{{ arrangement.arr_price }}€</strong>
+            <strong>{{ arrangement?.arr_price }}€</strong>
           </div>
 
           <div>
             <span>Total price</span>
-            <strong> {{ arrangement.arr_price * (peopleCount || 1) }}€ </strong>
+            <strong> {{ arrangement ? arrangement.arr_price * peopleCount : 0 }}€ </strong>
           </div>
         </div>
 
         <!-- BUTTON -->
-        <button class="confirm-booking">Confirm booking</button>
+        <button class="confirm-booking" @click="confirmBooking">Confirm booking</button>
+      </div>
+    </div>
+  </div>
+
+  <div v-if="isEditing" class="modal-overlay" @click.self="isEditing = false">
+    <div class="modal">
+      <h2>Edit Review</h2>
+
+      <label>Rating</label>
+      <input type="number" v-model="editForm.rev_rating" min="1" max="5" />
+
+      <label>Comment</label>
+      <textarea v-model="editForm.rev_comment"></textarea>
+
+      <div class="modal-actions">
+        <button class="save" @click="updateReview">Save</button>
+        <button class="cancel" @click="isEditing = false">Cancel</button>
       </div>
     </div>
   </div>
@@ -395,7 +437,6 @@ function goToDetails(id: number) {
 }
 
 const showBooking = ref(false)
-const peopleCount = ref(1)
 
 const toastMessage = ref('')
 const toastType = ref<'success' | 'error'>('success')
@@ -409,6 +450,58 @@ function triggerToast(message: string, type: 'success' | 'error' = 'success') {
   setTimeout(() => {
     showToast.value = false
   }, 3000)
+}
+
+const peopleCount = ref(1)
+const fullname = ref('')
+const email = ref('')
+const phonenum = ref()
+
+function openBooking() {
+  if (!session.isLoggedIn) {
+    triggerToast('Please login to continue booking.', 'error')
+
+    setTimeout(() => {
+      router.push('/login')
+    }, 1000)
+
+    return
+  }
+
+  showBooking.value = true
+}
+
+async function confirmBooking() {
+  if (!session.isLoggedIn) {
+    triggerToast('You must login to book this arrangement!', 'error')
+
+    router.push('/login')
+
+    return
+  }
+
+  try {
+    if (!arrangement.value) return
+
+    await api.postBooking({
+      usr_id: session.user.usr_id,
+      arr_id: arrangement.value.arr_id,
+      bok_num_people: peopleCount.value,
+      bok_total_price: arrangement.value.arr_price * peopleCount.value,
+    })
+
+    triggerToast('Booking successful! Request has sent to owner, wait for answer!', 'success')
+
+    fullname.value = ''
+    email.value = ''
+    phonenum.value = ''
+    peopleCount.value = 1
+
+    showBooking.value = false
+  } catch (error) {
+    console.log(error)
+    triggerToast('Booking failed!', 'error')
+  }
 }
 
 const rev_rating = ref()
@@ -451,12 +544,51 @@ async function deleteReview(id: number) {
   }
 }
 
-const editingReview = ref(null as any)
+const isEditing = ref(false)
+
+type EditReview = {
+  rev_id: number | null
+  usr_id: number | null
+  arr_id: number | null
+  rev_rating: number
+  rev_comment: string
+}
+
+const editForm = ref<EditReview>({
+  rev_id: null,
+  usr_id: null,
+  arr_id: null,
+  rev_rating: 0,
+  rev_comment: '',
+})
 
 function editReview(rev: any) {
-  editingReview.value = rev
-  rev_rating.value = rev.rev_rating
-  rev_comment.value = rev.rev_comment
+  if (!rev.rev_id) return
+
+  isEditing.value = true
+
+  editForm.value = {
+    rev_id: rev.rev_id,
+    usr_id: rev.usr_id,
+    arr_id: rev.arr_id,
+    rev_rating: rev.rev_rating,
+    rev_comment: rev.rev_comment,
+  }
+}
+
+async function updateReview() {
+  try {
+    await api.updateReview(
+      editForm.value.rev_id!,
+      editForm.value.rev_rating,
+      editForm.value.rev_comment,
+    )
+
+    isEditing.value = false
+    await getReviews()
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 type Room = {
@@ -1273,5 +1405,459 @@ function prev() {
 
 .actions button:hover {
   transform: scale(1.05);
+}
+
+.booking-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+
+  backdrop-filter: blur(8px);
+  overflow-y: auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 99999;
+  padding: 20px;
+}
+
+.booking-content {
+  width: 100%;
+  max-width: 600px;
+
+  max-height: 80vh;
+  overflow-y: auto;
+
+  background: white;
+  border-radius: 24px;
+
+  padding: 35px;
+  position: relative;
+
+  animation: popup 0.3s ease;
+}
+
+@keyframes popup {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+
+  width: 40px;
+  height: 40px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f3f3f3;
+  cursor: pointer;
+
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.close-btn:hover {
+  background: #111;
+  color: white;
+}
+
+.booking-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.booking-header h2 {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.booking-header p {
+  color: #777;
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  font-weight: 600;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  padding: 14px;
+
+  border-radius: 12px;
+  border: 1px solid #ddd;
+
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.input-group textarea {
+  resize: none;
+  min-height: 120px;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: #705519;
+
+  box-shadow: 0 0 0 4px rgba(112, 85, 25, 0.12);
+}
+
+.booking-summary {
+  margin-top: 10px;
+
+  background: #f8f8f8;
+  border-radius: 16px;
+
+  padding: 18px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.booking-summary div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.confirm-booking {
+  margin-top: 10px;
+
+  width: 100%;
+  padding: 16px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: #705519;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.confirm-booking:hover {
+  background: #8a6b1f;
+  transform: translateY(-2px);
+}
+
+.logged {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logged h1 {
+  font-size: 20px;
+  max-width: 500px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.transport-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0, 0.08);
+  margin-bottom: 40px;
+  transition: 0.3s;
+}
+
+.transport-card:hover {
+  transform: translateY(-3px);
+}
+
+.transport-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.transport-header img {
+  width: 28px;
+}
+
+.transport-header h2 {
+  font-size: 20px;
+  color: #111;
+}
+
+/* BODY */
+.transport-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ITEM */
+.transport-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: #f7f7f7;
+  border-radius: 10px;
+}
+
+.label {
+  color: #777;
+  font-size: 13px;
+}
+
+.value {
+  font-weight: 600;
+  color: #111;
+}
+
+/* EMPTY STATE */
+.transport-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #888;
+}
+
+.transport-empty img {
+  width: 50px;
+  margin-bottom: 10px;
+}
+
+.transport-empty h3 {
+  margin-bottom: 5px;
+  color: #666;
+}
+
+@media (max-width: 900px) {
+  .details-page {
+    padding-top: 140px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .container {
+    width: 100%;
+  }
+
+  /* TOP TEXT */
+  .top-text {
+    margin-bottom: 60px;
+  }
+
+  .top-text h1 {
+    font-size: 22px;
+    line-height: 1.3;
+  }
+
+  .location {
+    font-size: 13px;
+  }
+
+  /* HERO */
+  .hero {
+    height: 260px;
+    margin-bottom: 20px;
+  }
+
+  .hero-img {
+    border-radius: 16px;
+  }
+
+  .hero-overlay {
+    bottom: 10px;
+    left: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+
+  /* CONTENT STACK */
+  .content {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .booking-card {
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  /* ACCOMMODATION */
+  .acc-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 60px;
+  }
+
+  .acc-card {
+    height: 100px;
+  }
+
+  .acc-info h3 {
+    font-size: 14px;
+  }
+
+  .room {
+    font-size: 12px;
+  }
+
+  /* GALLERY */
+  .acc-images {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: 8px;
+  }
+
+  .thumb-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+  }
+
+  .main-img {
+    height: 220px;
+  }
+
+  .thumb img {
+    height: 90px;
+  }
+
+  /* REVIEWS */
+  .reviews-section {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    margin: 60px auto;
+  }
+
+  .reviews-left h2 {
+    font-size: 22px;
+  }
+
+  .stat-box h3 {
+    font-size: 22px;
+  }
+
+  /* ADD REVIEW */
+  .add-review {
+    padding: 18px;
+  }
+
+  .add-review h3 {
+    font-size: 18px;
+  }
+
+  .star-select {
+    height: 26px;
+  }
+
+  /* MODAL */
+  .booking-content {
+    max-width: 95%;
+    max-height: 90vh;
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  .booking-header h2 {
+    font-size: 22px;
+  }
+
+  .close-btn {
+    top: 10px;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+  }
+
+  /* TRANSPORT */
+  .transport-card {
+    padding: 14px;
+  }
+
+  .transport-header h2 {
+    font-size: 16px;
+  }
+
+  .transport-item {
+    font-size: 13px;
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal h2 {
+  margin-bottom: 15px;
+}
+
+.modal input,
+.modal textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.save {
+  background: green;
+  color: white;
+  padding: 8px 12px;
+}
+
+.cancel {
+  background: red;
+  color: white;
+  padding: 8px 12px;
 }
 </style>

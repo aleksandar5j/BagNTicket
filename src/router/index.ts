@@ -15,6 +15,7 @@ import Contact from '@/components/Contact.vue'
 import About from '@/components/About.vue'
 import Favorites from '@/components/Favorites.vue'
 import TransportDetails from '@/components/TransportDetails.vue'
+import BookingsView from '@/components/BookingsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -81,6 +82,11 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: About,
+    },
+    {
+      path: '/bookings',
+      name: 'bookings',
+      component: BookingsView,
     },
     {
       path: '/transport-arrangements/:tra_type',

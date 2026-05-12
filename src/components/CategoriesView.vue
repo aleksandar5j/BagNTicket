@@ -295,4 +295,107 @@ watch(
 .arr-overlay .price {
   color: #ddba6f;
 }
+
+@media (max-width: 900px) {
+  /* PAGE */
+  .page {
+    padding-top: 140px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .arrangements h2 {
+    font-size: 24px;
+  }
+
+  /* TITLE BLOCK */
+  .title-block {
+    margin-bottom: 40px;
+  }
+
+  .title-block h2 {
+    font-size: 26px;
+    line-height: 1.3;
+  }
+
+  .title-block p {
+    font-size: 13px;
+    margin-bottom: 60px;
+  }
+
+  /* GRID → MOBILE */
+  .grid {
+    gap: 12px;
+  }
+
+  /* CARD SIZE → MOBILE FRIENDLY */
+  .card {
+    width: 48%;
+    height: 220px;
+    border-radius: 14px;
+  }
+
+  /* 1 column on very small screens */
+  @media (max-width: 500px) {
+    .card {
+      width: 100%;
+      height: 240px;
+    }
+  }
+
+  /* LABEL */
+  .label {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  /* INFO BAR */
+  .info {
+    font-size: 11px;
+    padding: 5px 8px;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+  }
+
+  /* OVERLAY → NO HOVER ON MOBILE */
+  .overlay {
+    opacity: 0;
+  }
+
+  .card:active .overlay {
+    opacity: 1;
+  }
+
+  .overlay span {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  .card:hover {
+    transform: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .card:hover img {
+    transform: none;
+  }
+
+  .card img {
+    object-fit: cover;
+  }
+
+  .arr-overlay {
+    padding: 12px;
+    gap: 4px;
+  }
+
+  .arr-overlay .title h3 {
+    font-size: 13px;
+  }
+
+  .arr-overlay .price {
+    font-size: 12px;
+  }
+}
 </style>

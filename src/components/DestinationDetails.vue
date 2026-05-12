@@ -468,4 +468,154 @@ section h2 {
   border-radius: 12px;
   color: white;
 }
+
+@media (max-width: 900px) {
+  /* PAGE BASE */
+  .details-page {
+    padding-top: 140px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .container {
+    width: 100%;
+  }
+
+  /* INTRO */
+  .intro {
+    margin-bottom: 20px;
+  }
+
+  .title {
+    font-size: 26px;
+    line-height: 1.3;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    margin-bottom: 50px;
+    padding: 0 10px;
+  }
+
+  /* HERO */
+  .hero {
+    height: 220px;
+    margin-bottom: 20px;
+  }
+
+  .hero-img {
+    height: 220px;
+    border-radius: 14px;
+  }
+
+  .hero-overlay {
+    bottom: 10px;
+    left: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+
+  /* ARRANGEMENTS GRID */
+  .arr-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* ARR CARD */
+  .arr-card {
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .arr-image {
+    height: 180px;
+  }
+
+  .arr-overlay h3 {
+    font-size: 13px;
+  }
+
+  .arr-overlay p {
+    font-size: 11px;
+  }
+
+  .arr-body {
+    font-size: 11px;
+    height: auto;
+  }
+
+  .price {
+    font-size: 13px;
+  }
+
+  /* HOVER → DISABLE (MOBILE FIX) */
+  .arr-card:hover {
+    transform: none;
+  }
+
+  .arr-hover {
+    opacity: 0;
+  }
+
+  .arr-card:active .arr-hover {
+    opacity: 1;
+  }
+
+  /* HOTEL GRID */
+  .hotel-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .hotel-card {
+    width: 100%;
+    height: 220px;
+  }
+
+  .hotel-overlay h3 {
+    font-size: 14px;
+  }
+
+  .stars {
+    font-size: 12px;
+  }
+
+  .hotel-hover {
+    opacity: 0;
+  }
+
+  .hotel-card:active .hotel-hover {
+    opacity: 1;
+  }
+
+  .hotel-card:hover img {
+    transform: none;
+  }
+
+  /* SECTION SPACING */
+  .section {
+    margin-top: 20px;
+    margin-bottom: 60px;
+  }
+
+  section h2 {
+    font-size: 18px;
+  }
+
+  /* DIVIDER */
+  .divider-with-text span {
+    font-size: 18px;
+  }
+
+  /* HOTEL / CARD BASIC */
+  .card,
+  .hotel {
+    padding: 12px;
+  }
+
+  /* ROOM ROW */
+  .room {
+    font-size: 12px;
+  }
+}
 </style>

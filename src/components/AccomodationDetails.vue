@@ -5,19 +5,16 @@
         <div v-for="acc in accommodations" :key="acc.acc_id">
           <!-- HEADER -->
           <div class="acc-header">
-            <h1 style="text-align: center; font-size: 40px; margin-bottom: 20px">
-              <strong style="color: #705519">{{ acc.acc_name }}</strong> details
-            </h1>
-            <p style="text-align: center; margin-bottom: 150px">
-              Here you can find the perfect room for your stay, carefully designed to match your
-              comfort, style, and travel needs. Whether you’re looking for a cozy space to relax
-              after a day of exploring or a more luxurious setting to fully enjoy your vacation,
-              each option offers a unique experience. Our accommodations combine modern amenities
-              with a welcoming atmosphere, ensuring you feel at home from the moment you arrive.
-              Spacious interiors, comfortable beds, and thoughtfully designed details create the
-              ideal environment for rest and relaxation.
-            </p>
-
+            <div class="herrro">
+              <h1 style="text-align: center; font-size: 40px; margin-bottom: 20px">
+                <strong style="color: #705519">{{ acc.acc_name }}</strong> details
+              </h1>
+              <p style="text-align: center; margin-bottom: 150px; max-width: 700px">
+                Explore carefully selected accommodations designed to give you comfort, convenience,
+                and a truly relaxing experience. Each property is chosen to match high standards of
+                quality, location, and guest satisfaction.
+              </p>
+            </div>
             <h1 style="text-align: center">{{ acc.acc_name }}</h1>
             <div class="stars" style="text-align: center">
               <img
@@ -92,7 +89,7 @@
                   </div>
                 </div>
 
-                <button class="reserve-btn">Reserve now</button>
+                <button class="reserve-btn" @click="reserveNow">Reserve now</button>
               </div>
             </div>
           </div>
@@ -145,6 +142,16 @@
 
     <button @click="next">›</button>
   </div>
+
+  <transition name="toast">
+    <div v-if="showToast" :class="['toast', toastType]">
+      <img v-if="toastType === 'success'" src="/src/videos-images/for-all/check.png" />
+
+      <img v-else src="/src/videos-images/for-all/warning.png" />
+
+      <span>{{ toastMessage }}</span>
+    </div>
+  </transition>
 </template>
 
 <script setup lang="ts">
@@ -152,6 +159,56 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/api'
 import { imageUrl } from '@/api/config'
+
+const booking = ref({
+  from: '',
+  to: '',
+  people: 1,
+})
+
+const toastMessage = ref('')
+const toastType = ref<'success' | 'error'>('success')
+const showToast = ref(false)
+
+function triggerToast(message: string, type: 'success' | 'error' = 'success') {
+  toastMessage.value = message
+  toastType.value = type
+  showToast.value = true
+
+  setTimeout(() => {
+    showToast.value = false
+  }, 3000)
+}
+
+async function reserveNow() {
+  if (!booking.value.from || !booking.value.to || !booking.value.people) {
+    triggerToast('Please fill all fields', 'error')
+    return
+  }
+
+  if (booking.value.people < 1) {
+    triggerToast('Guests must be at least 1', 'error')
+    return
+  }
+
+  if (booking.value.from >= booking.value.to) {
+    triggerToast('Check-out must be after check-in', 'error')
+    return
+  }
+
+  try {
+    triggerToast('Reservation successful! Email has sent, wait for respone.', 'success')
+
+    booking.value = {
+      from: '',
+      to: '',
+      people: 1,
+    }
+  } catch (err) {
+    console.log(err)
+    triggerToast('Reservation failed!', 'error')
+  }
+}
 
 const route = useRoute()
 
@@ -173,12 +230,6 @@ type Accommodation = {
   images: string[] // 🔥 DODAJ OVO
   rooms: Room[]
 }
-
-const booking = ref({
-  from: '',
-  to: '',
-  people: 1,
-})
 
 const accommodations = ref<Accommodation[]>([])
 
@@ -561,5 +612,206 @@ function prev() {
 
 .reserve-btn:hover {
   background: #8a6b1f;
+}
+
+.herrro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.toast {
+  position: fixed;
+  top: 120px;
+  right: 30px;
+
+  min-width: 300px;
+  max-width: 420px;
+
+  padding: 16px 20px;
+
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  color: white;
+  font-weight: 600;
+
+  z-index: 99999;
+
+  backdrop-filter: blur(10px);
+
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.toast img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.toast.success {
+  background: linear-gradient(135deg, #1d553f, #16895c);
+}
+
+.toast.error {
+  background: linear-gradient(135deg, #703232, #ad5d5d);
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.35s ease;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateX(120px);
+}
+
+/* =========================
+   TABLET (do 1024px)
+========================= */
+@media (max-width: 1024px) {
+  .details-page {
+    padding-top: 180px;
+  }
+
+  .acc-images {
+    height: 400px;
+  }
+
+  .section2 {
+    gap: 30px;
+  }
+
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =========================
+   MOBILE (do 768px)
+========================= */
+@media (max-width: 768px) {
+  /* PAGE */
+  .details-page {
+    padding-top: 120px;
+  }
+
+  .container {
+    padding: 0 15px;
+  }
+
+  /* ===== GALLERY ===== */
+  .acc-images {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .thumb-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+  }
+
+  .main-img {
+    height: 250px;
+  }
+
+  .thumb-grid {
+    height: auto;
+  }
+
+  .more {
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+  }
+
+  /* ===== HEADER ===== */
+  .acc-header h1 {
+    font-size: 24px;
+  }
+
+  /* ===== SECTION SPLIT ===== */
+  .section2 {
+    flex-direction: column;
+  }
+
+  .left,
+  .right {
+    width: 100%;
+  }
+
+  /* ===== ROOMS ===== */
+  .hotel-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .room-img {
+    width: 100%;
+    height: 180px;
+  }
+
+  .room-action {
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
+
+  .book-btn {
+    width: 100%;
+  }
+
+  /* ===== BOOKING ===== */
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-box {
+    padding: 15px;
+  }
+
+  /* ===== LIGHTBOX ===== */
+  .lightbox img {
+    max-width: 90%;
+  }
+
+  .close {
+    top: 20px;
+    right: 20px;
+    font-size: 26px;
+  }
+
+  .lightbox button {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .acc-header h1 {
+    font-size: 20px;
+  }
+
+  .description h2,
+  .right h2 {
+    font-size: 20px;
+  }
+
+  .price {
+    font-size: 16px;
+  }
+
+  .thumb-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .more {
+    font-size: 12px;
+  }
 }
 </style>

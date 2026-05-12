@@ -28,6 +28,21 @@ onMounted(() => {
 })
 
 const isOpen = ref(false)
+
+const isMobileMenuOpen = ref(false)
+
+function toggleMobileMenu() {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+}
+
+function closeMobileMenu() {
+  isMobileMenuOpen.value = false
+}
+
+function logoutAndClose() {
+  session.logout()
+  closeMobileMenu()
+}
 </script>
 
 <template>
@@ -58,8 +73,59 @@ const isOpen = ref(false)
             <router-link to="/" @click="session.logout" class="logout">Log Out</router-link>
           </div>
         </div>
+        <div class="hamburger" @click="toggleMobileMenu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </header>
+
+    <div class="mobile-menu" :class="{ open: isMobileMenuOpen }" @click="closeMobileMenu">
+      <div class="mobile-menu-content" @click.stop>
+        <div class="close-btn" @click="closeMobileMenu">✕</div>
+        <router-link to="/destinations" @click="closeMobileMenu">Destinations</router-link>
+
+        <div class="mobile-dropdown">
+          <span @click="isOpen = !isOpen">Categories ▾</span>
+
+          <div class="mobile-dropdown-content" v-if="isOpen">
+            <router-link
+              v-for="cat in categories"
+              :key="cat.cat_id"
+              :to="`/categories/${cat.cat_id}`"
+              @click="closeMobileMenu"
+            >
+              {{ cat.cat_name }}
+            </router-link>
+          </div>
+        </div>
+
+        <router-link to="/offers" @click="closeMobileMenu">Offers</router-link>
+        <router-link to="/hotels" @click="closeMobileMenu">Hotels</router-link>
+
+        <router-link v-if="session.isLoggedIn" to="/favorites" @click="closeMobileMenu"
+          >Favorites</router-link
+        >
+        <router-link v-if="session.isLoggedIn" to="/bookings" @click="closeMobileMenu"
+          >Bookings</router-link
+        >
+
+        <router-link to="/contact" @click="closeMobileMenu">Contact</router-link>
+        <router-link to="/about" @click="closeMobileMenu">About Us</router-link>
+
+        <div class="mobile-auth">
+          <template v-if="!session.isLoggedIn">
+            <router-link to="/login" @click="closeMobileMenu">Login</router-link>
+            <router-link to="/register" @click="closeMobileMenu">Register</router-link>
+          </template>
+
+          <template v-else>
+            <router-link to="/" @click="logoutAndClose"> Log Out </router-link>
+          </template>
+        </div>
+      </div>
+    </div>
 
     <div class="main-nav">
       <div class="container nav-inner">
@@ -546,5 +612,141 @@ const isOpen = ref(false)
 .authh .logout:hover {
   background-color: rgb(136, 0, 0);
   transition: 0.2s;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  z-index: 3000;
+}
+
+.hamburger span {
+  width: 28px;
+  height: 3px;
+  background: #000000;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100vh;
+
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.85), rgba(20, 20, 20, 0.9));
+  backdrop-filter: blur(20px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+
+  transition: 0.3s ease;
+
+  z-index: 2500;
+}
+
+.mobile-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mobile-menu-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.mobile-menu-content a,
+.mobile-menu-content span {
+  color: #fff;
+  font-size: 20px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* DROPDOWN MOBILE */
+.mobile-dropdown-content {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* RESPONSIVE RULES */
+@media (max-width: 900px) {
+  .nav,
+  .auth,
+  .authh,
+  .social {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+    margin-right: 40px;
+  }
+
+  .top-inner {
+    justify-content: space-between;
+    margin: 0 20px;
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+
+  font-size: 30px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.mobile-menu-content a,
+.mobile-menu-content span {
+  color: #fff;
+  font-size: 18px;
+
+  padding: 12px 18px;
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  text-decoration: none;
+
+  transition: 0.2s;
+}
+
+.mobile-menu-content a:hover,
+.mobile-menu-content span:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateX(5px);
+}
+
+.mobile-dropdown > span {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mobile-dropdown-content a {
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 16px;
+}
+
+.mobile-auth {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 </style>
