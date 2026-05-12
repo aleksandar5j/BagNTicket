@@ -39,7 +39,7 @@
 
           <button class="hotel-btn" @click="scroolTo()">Choose other hotel</button>
 
-          <button class="book-btn">Book now</button>
+          <button class="book-btn" @click="showBooking = true">Book now</button>
         </div>
       </div>
 
@@ -304,6 +304,73 @@
       <span>{{ toastMessage }}</span>
     </div>
   </transition>
+
+  <div v-if="showBooking" class="booking-modal" @click.self="showBooking = false">
+    <div class="booking-content">
+      <!-- CLOSE -->
+      <button class="close-btn" @click="showBooking = false">✕</button>
+
+      <!-- HEADER -->
+      <div class="booking-header">
+        <h2>Complete your reservation</h2>
+        <p>You're one step away from your next unforgettable adventure ✈️</p>
+      </div>
+
+      <!-- FORM -->
+      <div class="booking-form">
+        <div class="input-group">
+          <label>Full name</label>
+          <input type="text" placeholder="Enter your full name" />
+        </div>
+
+        <div class="input-group">
+          <label>Email address</label>
+          <input type="email" placeholder="Enter your email" />
+        </div>
+
+        <div class="input-group">
+          <label>Phone number</label>
+          <input type="text" placeholder="Enter your phone number" />
+        </div>
+
+        <div class="input-group">
+          <label>Number of travelers</label>
+
+          <select v-model="peopleCount">
+            <option disabled value="">Select travelers</option>
+
+            <option v-for="n in arrangement.arr_capacity" :key="n" :value="n">
+              {{ n }} Traveler{{ n > 1 ? 's' : '' }}
+            </option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label>Special requests</label>
+
+          <textarea
+            placeholder="Optional notes, room preferences, transport requests..."
+          ></textarea>
+        </div>
+
+        <!-- SUMMARY -->
+        <div class="booking-summary">
+          <div>
+            <span>Price per person</span>
+            <strong>{{ arrangement.arr_price }}€</strong>
+          </div>
+
+          <div>
+            <span>Total price</span>
+            <strong> {{ arrangement.arr_price * (peopleCount || 1) }}€ </strong>
+          </div>
+        </div>
+
+        <!-- BUTTON -->
+        <button class="confirm-booking">Confirm booking</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -326,6 +393,9 @@ function goToDetails(id: number) {
     params: { id },
   })
 }
+
+const showBooking = ref(false)
+const peopleCount = ref(1)
 
 const toastMessage = ref('')
 const toastType = ref<'success' | 'error'>('success')

@@ -12,6 +12,13 @@ type RegisterData = {
   email: string
 }
 
+type Booking = {
+  usr_id: number
+  arr_id: number
+  bok_num_people: number
+  bok_total_price: number
+}
+
 type postRev = {
   usr_id: number
   arr_id: number
@@ -106,4 +113,7 @@ export default {
     axios.post('front/reviews', { usr_id, arr_id, rev_rating, rev_comment }),
   deleteReview: (rev_id: number, usr_id: number) =>
     axios.delete('front/reviews', { params: { rev_id, usr_id } }),
+
+  postBooking: ({ usr_id, arr_id, bok_num_people, bok_total_price }: Booking) =>
+    axios.post('front/bookings', { usr_id, arr_id, bok_num_people, bok_total_price }),
 }
