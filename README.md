@@ -6,6 +6,8 @@ A modern full-stack web application for managing travel bookings, destinations, 
 
 ---
 
+## https://577z123.e2.mars-hosting.com
+
 ## 🌍 About the Project
 
 **Bag n Ticket** is built as a real-world tourism platform where users can:
@@ -182,17 +184,3 @@ pnpm install
 pnpm dev
 ```
 
-stallation Guide
-
-Follow these steps to run the project locally on your machine.
-
----
-
-### 1️⃣ Clone the repository
-
-```bash
-git clone https://github.com/your-username/bag-n-ticket.git
-cd bag-n-ticket
-pnpm install
-pnpm dev
-```
