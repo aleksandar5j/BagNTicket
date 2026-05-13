@@ -71,6 +71,7 @@ function logoutAndClose() {
           </div>
           <div class="authh" v-else>
             <router-link to="/" @click="session.logout" class="logout">Log Out</router-link>
+            <router-link to="/" v-if="session.isOwner" class="admin">Admin Panel</router-link>
           </div>
         </div>
         <div class="hamburger" @click="toggleMobileMenu">
@@ -122,6 +123,7 @@ function logoutAndClose() {
 
           <template v-else>
             <router-link to="/" @click="logoutAndClose"> Log Out </router-link>
+            <router-link to="/" v-if="session.isOwner">Admin Panel</router-link>
           </template>
         </div>
       </div>
@@ -614,6 +616,16 @@ function logoutAndClose() {
   transition: 0.2s;
 }
 
+.authh .admin {
+  background: #06408d;
+  color: #ffffff;
+}
+
+.authh .admin:hover {
+  background-color: #3b5e94;
+  transition: 0.2s;
+}
+
 .hamburger {
   display: none;
   flex-direction: column;
@@ -638,16 +650,20 @@ function logoutAndClose() {
   width: 100%;
   height: 100vh;
 
+  padding-top: 40px;
+
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.85), rgba(20, 20, 20, 0.9));
   backdrop-filter: blur(20px);
 
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
+
+  overflow-y: auto;
 
   transition: 0.3s ease;
 

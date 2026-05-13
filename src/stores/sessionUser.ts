@@ -49,5 +49,6 @@ export const useSessionStore = defineStore('session', {
 
   getters: {
     isLoggedIn: (state) => !!state.user,
+    isOwner: (state) => Number(state.user?.rol_id) === 2,
   },
 })
