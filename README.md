@@ -6,7 +6,7 @@ A modern full-stack web application for managing travel bookings, destinations, 
 
 ---
 
-## https://577z123.e2.mars-hosting.com
+## https://583f123.mars2.mars-hosting.com
 
 ## 🌍 About the Project
 
@@ -183,4 +183,3 @@ cd bag-n-ticket
 pnpm install
 pnpm dev
 ```
-
