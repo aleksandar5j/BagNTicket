@@ -85,6 +85,7 @@ onMounted(() => {
             <div class="card-overlay">
               <h3>{{ fav.des_name }}</h3>
               <p>{{ fav.des_country }}</p>
+              <span>Explore</span>
             </div>
           </div>
         </div>
@@ -155,25 +156,51 @@ onMounted(() => {
 .card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7));
 
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: 15px;
 
-  color: #fff;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  gap: 8px;
+
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(5px);
+
+  opacity: 0;
+  transition: 0.3s ease;
+}
+
+.dest-card:hover .card-overlay {
+  opacity: 1;
+}
+
+.card-overlay span {
+  margin-top: 10px;
+
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+
+  padding: 8px 18px;
+  border-radius: 999px;
+
+  font-weight: bold;
 }
 
 .card-overlay h3 {
   margin: 0;
   font-size: 20px;
+  color: white;
 }
 
 .card-overlay p {
   margin: 0;
   font-size: 14px;
   opacity: 0.85;
+  color: white;
 }
 
 .no-fav {

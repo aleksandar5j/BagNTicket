@@ -54,6 +54,15 @@ watch(
   () => route.params.id,
   () => getDestinations(),
 )
+
+function getPrice(arr: Arrangement) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const discount = (arr as any).arr_discount || 0
+  return Math.round(arr.arr_price * (1 - discount / 100))
+}
+function hasDiscount(arr: Arrangement) {
+  return (arr as any).arr_discount > 0
+}
 </script>
 
 <template>
@@ -73,6 +82,7 @@ watch(
           :key="arr.arr_id"
           @click="goToDetails(arr.arr_id)"
         >
+          <div v-if="arr.arr_discount" class="badge">-{{ arr.arr_discount }}%</div>
           <img v-if="arr.image" :src="imageUrl + arr.image" />
           <div v-else class="no-img">No image</div>
 
@@ -81,7 +91,11 @@ watch(
               <h3>{{ arr.arr_title }}</h3>
             </div>
 
-            <div class="price">{{ arr.arr_price }} €</div>
+            <div class="price">
+              <span v-if="hasDiscount(arr)" class="old"> {{ arr.arr_price }}€ </span>
+
+              <span class="new"> {{ getPrice(arr) }}€ </span>
+            </div>
             <span>{{ arr.arr_duration_days }} days</span>
           </div>
 
@@ -397,5 +411,38 @@ watch(
   .arr-overlay .price {
     font-size: 12px;
   }
+}
+
+.price {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.old {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 14px;
+}
+
+.new {
+  color: #ddba6f;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  background: #ddba6f;
+  color: white;
+
+  padding: 5px 10px;
+  border-radius: 20px;
+
+  font-size: 12px;
+  font-weight: bold;
 }
 </style>

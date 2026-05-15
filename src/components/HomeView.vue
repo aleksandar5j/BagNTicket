@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { imageUrl } from '@/api/config'
 import api from '@/api'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 import { useRouter } from 'vue-router'
 import { useSessionStore } from '@/stores/sessionUser'
@@ -45,6 +45,7 @@ type Arrangement = {
   arr_available_from: Date
   arr_available_to: Date
   arr_createdat: Date
+  arr_discount: number
   image: string
   cat_name: string
 }
@@ -179,6 +180,15 @@ onMounted(() => {
   getLastMinDeals()
   getTransports()
 })
+
+function getPrice(arr: Arrangement) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const discount = (arr as any).arr_discount || 0
+  return Math.round(arr.arr_price * (1 - discount / 100))
+}
+function hasDiscount(arr: Arrangement) {
+  return (arr as any).arr_discount > 0
+}
 </script>
 
 <template>
@@ -280,11 +290,17 @@ onMounted(() => {
 
         <div class="deals-slider" ref="slider">
           <div class="deal-card" v-for="arr in lastMinuteDeals" :key="arr.arr_id">
+            <div class="discount-badge">-{{ arr.arr_discount }}%</div>
+
             <img v-if="arr.image" :src="imageUrl + arr.image" />
 
             <div class="deal-content">
               <h3>{{ arr.arr_title }}</h3>
-              <p class="price">{{ arr.arr_price }}€</p>
+              <div class="price">
+                <span v-if="hasDiscount(arr)" class="old"> {{ arr.arr_price }}€ </span>
+
+                <span class="new"> {{ getPrice(arr) }}€ </span>
+              </div>
 
               <button @click="goToDetailsArr(arr.arr_id)">Book now</button>
             </div>
@@ -413,8 +429,8 @@ onMounted(() => {
 
 /* ARROWS */
 .controls button {
-  background: #111;
-  color: #fff;
+  background: #000000;
+  color: #ffffff;
   border: none;
   margin-left: 10px;
   padding: 8px 14px;
@@ -424,8 +440,7 @@ onMounted(() => {
 }
 
 .controls button:hover {
-  background: #f5c542;
-  color: #000;
+  background: red;
 }
 
 /* SLIDER */
@@ -1047,5 +1062,46 @@ onMounted(() => {
   .about-top h1 {
     font-size: 28px;
   }
+}
+
+.price {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.old {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 14px;
+}
+
+.new {
+  color: red;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.deal-card {
+  position: relative;
+}
+
+.discount-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  background: #ff3b30;
+  color: white;
+
+  padding: 6px 8px;
+  border-radius: 999px;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  z-index: 5;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 </style>

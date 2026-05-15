@@ -133,7 +133,7 @@ onMounted(async () => {
             {{ dest.des_name }}
           </div>
           <div class="overlay">
-            <span>View more</span>
+            <span>Explore</span>
           </div>
         </div>
       </div>
@@ -261,6 +261,9 @@ onMounted(async () => {
 
 .card:hover .overlay span {
   transform: translateY(0);
+  padding: 10px 20px;
+  backdrop-filter: blur(2px);
+  border-radius: 30px;
 }
 
 .card img {
