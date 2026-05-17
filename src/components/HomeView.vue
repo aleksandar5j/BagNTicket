@@ -182,7 +182,6 @@ onMounted(() => {
 })
 
 function getPrice(arr: Arrangement) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const discount = (arr as any).arr_discount || 0
   return Math.round(arr.arr_price * (1 - discount / 100))
 }
@@ -203,28 +202,32 @@ function hasDiscount(arr: Arrangement) {
 
         <!-- BOTTOM -->
         <div class="about-bottom">
-          <!-- LEFT TEXT -->
-          <div class="about-text">
-            <p>
-              We are a modern travel agency specializing in tailor-made journeys, luxury vacations,
-              and unforgettable adventures across the world.
-            </p>
+          <!-- LEFT SIDE -->
+          <div class="promo-coupon">
+            <div class="coupon-badge">LIMITED OFFER</div>
 
-            <p class="sub">
-              From tropical beaches to iconic cities, we connect you with the best destinations,
-              hand-picked hotels, and exclusive travel deals — all in one place. Our mission is to
-              turn your travel dreams into reality by offering personalized experiences designed
-              around your preferences, style, and budget. Whether you're looking for a relaxing
-              escape, a romantic getaway, or an exciting adventure, we ensure every detail is
-              carefully planned. With a passion for travel and a commitment to excellence, we
-              partner with trusted providers worldwide to deliver exceptional service, comfort, and
-              a lifetime.
-            </p>
-          </div>
+            <div class="coupon-content">
+              <div class="coupon-left">
+                <img src="/public/images/gift.png" class="coupon-icon" />
 
-          <!-- RIGHT IMAGE -->
-          <div class="about-image">
-            <img src="/public/images/travelagency.jpg" alt="travel image" />
+                <div>
+                  <h2>SUMMER PROMO CODE</h2>
+
+                  <div class="coupon-code">SUMMER</div>
+
+                  <p class="discount">Get <strong>30% OFF</strong> on all arrangements</p>
+
+                  <p class="coupon-sub">
+                    Use this exclusive promo code during booking and enjoy unforgettable
+                    destinations at a special discounted price.
+                  </p>
+                </div>
+              </div>
+
+              <div class="coupon-right">
+                <img src="/public/images/travelagency.jpg" alt="promo" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -656,6 +659,8 @@ function hasDiscount(arr: Arrangement) {
 .about-top {
   text-align: center;
   margin-top: 30px;
+  max-width: 1000px;
+  margin: auto;
 }
 
 .about-top h1 {
@@ -669,53 +674,134 @@ function hasDiscount(arr: Arrangement) {
   color: #705519;
 }
 
-/* BOTTOM */
 .about-bottom {
+  margin-top: 150px;
+}
+
+.promo-coupon {
+  position: relative;
+
+  background: linear-gradient(135deg, #705519, #8a6b1f);
+
+  border-radius: 28px;
+  overflow: hidden;
+
+  padding: 40px;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.coupon-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  background: white;
+  color: #705519;
+
+  padding: 10px 18px;
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.coupon-content {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 40px;
-  margin-top: 180px;
-  margin-bottom: 30px;
-  padding: 30px;
-
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* TEXT */
-.about-text {
+.coupon-left {
   flex: 1;
-  font-size: 16px;
-  line-height: 1.7;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+
+  color: white;
 }
 
-.about-text .sub {
-  margin-top: 15px;
-  color: #666;
-  font-size: 15px;
+.coupon-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
 }
 
-/* IMAGE */
-.about-image {
-  flex: 1;
+.coupon-left h2 {
+  font-size: 38px;
+  margin-bottom: 18px;
 }
 
-.about-image img {
+.coupon-code {
+  display: inline-block;
+
+  padding: 14px 30px;
+
+  background: rgba(255, 255, 255, 0.18);
+
+  border: 2px dashed white;
+  border-radius: 14px;
+
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 4px;
+
+  margin-bottom: 18px;
+}
+
+.discount {
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.coupon-sub {
+  max-width: 600px;
+  line-height: 1.8;
+  opacity: 0.92;
+}
+
+.coupon-right {
+  width: 380px;
+  height: 260px;
+
+  border-radius: 24px;
+  overflow: hidden;
+
+  flex-shrink: 0;
+}
+
+.coupon-right img {
   width: 100%;
-  height: 300px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 12px;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .about-bottom {
+@media (max-width: 900px) {
+  .coupon-content {
     flex-direction: column;
   }
 
-  .about-image img {
-    height: 250px;
+  .coupon-left {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .coupon-left h2 {
+    font-size: 28px;
+  }
+
+  .coupon-code {
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+
+  .coupon-right {
+    width: 100%;
+    height: 220px;
   }
 }
 

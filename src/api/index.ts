@@ -125,4 +125,9 @@ export default {
   getBookings: (usr_id: number) => axios.get('front/bookings', { params: { usr_id } }),
   deleteBooking: (usr_id: number, bok_id: number) =>
     axios.delete('front/bookings', { params: { usr_id, bok_id } }),
+
+  checkCoupon: (code: string) =>
+    axios.get('front/coupons/check', {
+      params: { code },
+    }),
 }

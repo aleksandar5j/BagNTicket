@@ -225,7 +225,9 @@
           placeholder="Tell other travelers about your experience..."
         ></textarea>
 
-        <button @click="postReview">Post review</button>
+        <button @click="postReview" :disabled="postingReview">
+          {{ postingReview ? 'Posting...' : 'Post review' }}
+        </button>
       </div>
 
       <div v-else class="login-review-box">
@@ -362,6 +364,20 @@
           ></textarea>
         </div>
 
+        <div class="input-group">
+          <label>Promo code</label>
+
+          <div class="promo-box">
+            <input type="text" placeholder="Enter promo code" v-model="promoCode" />
+
+            <button class="apply-btn" @click="applyCoupon">Apply</button>
+          </div>
+
+          <span v-if="couponApplied" class="discount-text">
+            {{ discountValue }}% discount applied
+          </span>
+        </div>
+
         <!-- SUMMARY -->
         <div class="booking-summary">
           <div>
@@ -371,7 +387,9 @@
 
           <div>
             <span>Total price</span>
-            <strong> {{ arrangement ? arrangement.arr_price * peopleCount : 0 }}€ </strong>
+            <strong v-if="couponApplied"> {{ discountedPrice }}€ </strong>
+
+            <strong v-else> {{ arrangement ? arrangement.arr_price * peopleCount : 0 }}€ </strong>
           </div>
         </div>
 
@@ -471,10 +489,17 @@ async function confirmBooking() {
       usr_id: session.user.usr_id,
       arr_id: arrangement.value.arr_id,
       bok_num_people: peopleCount.value,
-      bok_total_price: arrangement.value.arr_price * peopleCount.value,
+      bok_total_price: couponApplied.value
+        ? discountedPrice.value
+        : arrangement.value.arr_price * peopleCount.value,
     })
 
     triggerToast('Booking successful! Request has sent to owner, wait for answer!', 'success')
+
+    promoCode.value = ''
+    discountValue.value = 0
+    discountedPrice.value = 0
+    couponApplied.value = false
 
     fullname.value = ''
     email.value = ''
@@ -491,11 +516,18 @@ async function confirmBooking() {
 const rev_rating = ref()
 const rev_comment = ref()
 
+const postingReview = ref(false)
+
 async function postReview() {
+  if (postingReview.value) return
+
   if (!rev_rating.value || !rev_comment.value) {
     triggerToast('You must give a rating and comment!', 'error')
     return
   }
+
+  postingReview.value = true
+
   try {
     const res = await api.postReview({
       usr_id: session.user.usr_id,
@@ -514,6 +546,8 @@ async function postReview() {
     await getReviews()
   } catch (error) {
     console.log(error)
+  } finally {
+    postingReview.value = false
   }
 }
 
@@ -680,6 +714,42 @@ function next() {
 function prev() {
   activeIndex.value =
     (activeIndex.value - 1 + activeImages.value.length) % activeImages.value.length
+}
+
+const promoCode = ref('')
+const discountValue = ref(0)
+const discountedPrice = ref(0)
+const couponApplied = ref(false)
+
+async function applyCoupon() {
+  if (!promoCode.value) {
+    triggerToast('Enter promo code!', 'error')
+    return
+  }
+
+  try {
+    const res = await api.checkCoupon(promoCode.value)
+
+    const coupon = res.data.data.data
+
+    if (!coupon) {
+      triggerToast('Invalid promo code!', 'error')
+      return
+    }
+
+    discountValue.value = coupon.cop_discount_value
+
+    const total = arrangement.value!.arr_price * peopleCount.value
+
+    discountedPrice.value = total - (total * discountValue.value) / 100
+
+    couponApplied.value = true
+
+    triggerToast(`Promo code applied! ${discountValue.value}% discount`, 'success')
+  } catch (err) {
+    console.log(err)
+    triggerToast('Coupon check failed!', 'error')
+  }
 }
 </script>
 
@@ -1018,18 +1088,17 @@ function prev() {
 }
 
 .star-iconn {
-  height: 40px;
+  height: 30px;
   margin-right: 5px;
   margin-bottom: 20px;
-  margin-top: 10px;
 }
 
 .hotel-info {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 25px;
+  gap: 5px;
 }
 
 .reviews-section {
@@ -1328,7 +1397,7 @@ function prev() {
   color: white;
   font-weight: 600;
 
-  z-index: 99999;
+  z-index: 100000;
 
   backdrop-filter: blur(10px);
 
@@ -1711,6 +1780,10 @@ function prev() {
     font-size: 14px;
   }
 
+  .star-iconn {
+    height: 20px;
+  }
+
   .room {
     font-size: 12px;
   }
@@ -1843,5 +1916,26 @@ function prev() {
   background: red;
   color: white;
   padding: 8px 12px;
+}
+
+.promo-box {
+  display: flex;
+  gap: 10px;
+}
+
+.apply-btn {
+  padding: 0 20px;
+  border: none;
+  background: #705519;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.discount-text {
+  color: green;
+  font-size: 14px;
+  font-weight: 600;
 }
 </style>
